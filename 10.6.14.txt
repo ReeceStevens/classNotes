@@ -1,0 +1,35 @@
+EE319K
+10.6.14
+=========
+Announcements
+	1. Exam 1 will be returned Wednesday
+	2. Lab 4 due-- clarifications
+	3. Lab 5 is in C!!! :D :D :D
+		will be using structs
+	4. HW 4 is now online, covers arrays in C
+
+Lab 4
+	Functional Debugging
+		Save debugging information into arrays ("Data" and "Time")
+		Minimally intrusive debugging
+		Declaring arrays in C	
+			uint32_t DataBuffer[size];
+			uint32_t TimeBuffer[size];
+		Using pointers to access elements in the array
+
+	SysTick	
+		NVIC_ST_CTRL_R->last three bits: ClockSource, InterruptEnable, ENable
+			setting these bits to 101 -> clocksource plus PLL, switch to 80MHz
+		NVIC_ST_RELOAD_R-> The initial value of the timer
+		NVIC_ST_CURRENT_R-> The current time of systick
+		Systick runs in parallel with processor, i.e. it takes no processor time-- we can access it whenever we want
+	 
+	Texas_Init
+		- Contains the grader
+		- Voltmeter on PD4 (might be PD3) (use Texas Display)-- connect PD4 with any other pin and it will serve as a voltmeter
+		
+	Note about AAPCS
+		Must push/pop an even number of registers!
+		If not, will throw the "not preserving 8 bit alignment" error
+
+Check out ~/Downloads/FunctionalDebugging/main.s
