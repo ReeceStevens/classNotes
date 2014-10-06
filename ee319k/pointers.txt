@@ -1,0 +1,29 @@
+Arrays (Pointers)
+================
+Points to a location in memory 	
+	In assembly: LDR R1, [R0] ; R0 points to a location in memory
+	
+To store multiple elements, put them next to each other in memory and then return a pointer that 
+points to the memory location of the first element
+
+In ASM
+	Indexed Addressing Mode
+	When we "de-reference" the pointer; i.e. get to the element that the pointer is pointing to.
+
+In C
+	int16_t var; // var "is a" int16_t
+	int16_t *pvar; // var "is a pointer" to int16_t
+	// For a pointer, to access any location in memory the pointer must be 4 bytes long
+	pvar = &var; // pvar has "address of" var
+	
+	var = 25; // directly accessing the variable
+	*pvar = 13; // indirectly accessing the variable via a pointer
+
+What does this say in assembly?
+	LDR R0, =pvar
+	LDR R1, [R0]
+	MOV R2, #13
+	STR R2, [R1];
+
+Conventions for delcaring pointers
+	Type *Name;

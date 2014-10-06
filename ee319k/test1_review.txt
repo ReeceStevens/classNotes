@@ -1,0 +1,50 @@
+Test 1 Review (9.29.14)
+=======================
+
+Addressing Modes
+	Operands have addressing modes
+		MOV R1, #13; two operands, each has an addressing mode
+			Register addressing mode and immediate addressing mode
+		LDR R0, =foo; 
+			Register addressing mode, PC-relative addressing mode
+				internally, the assembler computes a pc-relative offset to access the value
+		STR R1, [R0]
+			SEcond is an indexed addressing mode
+			Also could be "sp" or R13 (stack pointer); still indexed addressing mode
+		STR R1, [R0, #5]
+			Indexed addressing mode as well, but with a base + offset (if no offset is given, assumed that offset = 0)
+		PUSH {R0-R3, R12}
+			Register-list addressing mode
+
+NZVC Bits
+	VC are overflow bits
+		V = signed overflow
+		C = unsigned overflow
+	In Assembly
+		foo		DCB	5 ; DeclareConstantByte
+		bar		DCW	-1; DeclareConstantWord									int16_t bar = -1; // in C
+		foobar	DCD 2	; DeclareConstantDoubleWord							int32_t foobar = 5;//c
+	
+				LDR R0, =bar
+				LDR R1, [R0]	; R1 currently holds 16 ones in it;
+
+	Both V and C are set for any operation; must choose the correct branch statement to ensure the proper condition is
+	being tested.
+		Unsigned:
+			BHI, BHS, BLO, BLS
+		Signed:
+			BLT, BLE, BGT, BGE
+	
+	Addition Overflow: signed v = 1; unsigned c = 1; (ADDS)
+	Subtraction Overflow: signed v = 1; unsigned c = 0; (SUBS, CMP)
+
+	Number wheel approach: 	
+		if you cross the anomalous boundary either way, V is set to 1;
+
+The Stack
+	PUSH {R1-R3, R7}; lower-numbered register goes to the lower address.
+	POP {R4-R8]; whatever is on the stack is put into these registers; lowest address goes to lowest numbered register
+
+Positive vs. Negative Logic
+	built-in switches (SW1, SW2; PF4 and PF0) are both negative logic
+		Internal resistors (Pull Up for negative logic, Pull Down for positive logic)

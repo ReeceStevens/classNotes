@@ -1,0 +1,107 @@
+EE319K
+Notes 10.1.14
+=============
+
+Functional Debugging (Instrumentation)
+--------------------------------------
+	Debugging in general: spectrum of intrusiveness
+
+	Highly Intrusive							 Non-intrusive
+	|--------------------------------------------|
+  ex: printf, breakpoint					ex: Logic analyzer, oscilliscope
+									|------------|
+							We want to operate here in the "minimally intrusive" section
+
+	Quantify the amount of intrusiveness of a debugging method
+		delta t
+		depending on time scale of program, may or may not be intrusive
+		
+	Lab 4: 		  Init <- Debug_Init
+			mLoop	
+				...
+				BL Debug-Capture
+				...
+				B mLoop
+
+	Problem Statement:
+		if button is pressed, flash LED. If not pressed, LED is off.
+		if specific flash time is required (say, 10 ms), how would you create that specific time?
+			We would use the logic analyzer and adjust our delay time in software
+			On the real board, we don't have the logic analyzer, but we can use an oscilliscope
+		BUT more useful than oscilliscope (and built in to the board!) is the SYSTICK
+		Use Debug-Capture to note the time on the system clock after every transition
+			DUMP values into an array (t1, t2, t3, ...) (the data is called capturing data)
+			Can check the array for the difference between t2 and t1 is-- time difference and variance can be calculated.
+		Can do this in both simulator and the real board! It's all software.
+		
+Things we need to learn to use this technique:
+	1. Systick timer
+	2. Usage of arrays
+
+Arrays
+------
+
+	In C:								In ASM:
+	// A single variable
+		uint8_t score1;						score1	SPACE	1
+
+	// When you have a collection of items of the same data type, we use an array
+	// Declaring an array of variables
+		uint8_t scores[40];					scores 	SPACE	40 ; No data types in ASM, we just assign 40 bytes of space, assigned the hook "scores". Be sure to calculate the number of bytes you need.
+	
+	// Declare + initialize
+		uint32_t Primes[5] = {1, 2, 3, 5, 7};	Primes	DCD	1, 2, 3, 5, 7		; DCD=DeclareConstantDouble
+
+	// Accessing Arrays
+		scores[1] = 75;						LDR R0, =scores 	; base
+		scores[1] += 5;						MOV R1, #75
+											STRB R1, [R0, #1]	; But hey! STR stores 4 bytes! Must specify to only store one byte
+	
+											; If it were 16 bits
+		bScores[1] = 75									STRH R1, [R0, #2]	; 
+		(base)	[index]											(base)(index)
+
+		Address of a location in an array = base + index*(size of each element);
+		to access bScores[5]:
+		
+	**** Things to watch out for! ****
+		int8_t sth[15]; int8_t x;
+		x = sth[4];
+		
+		In ASM?
+			LDR R0, =x
+			LDR R1, =sth;
+			LDRSB R2, [R1, #4] ; NOTE THE COMMAND we use SB to signify a signed bit
+		
+		if location had -1,
+			LDRSB -> R2 = 11111111:	-1
+			LDRB -> R2 = 0000011111111: 255
+
+Systick Timer
+-------------
+	Part of the NVIC (Nested Vector Interrupt Controller)
+	Systick has three device registers:
+
+		NVIC_ST_CTRL_R: bits 0 = EN (enable), 1 = IE(interrupts), 2 = CS (clock source)
+		NVIC_ST_RELOAD_R (only use first 24 bits): holds set time cap
+		NVIC_ST_CURRENT_R (only use first 24 bits): holds current systick value
+		
+	Systick is a countdown timer
+		Always continues, when hits zero it just resets to the high value
+
+	Setup Systick
+		1. Disable systick for configuration		EN <- 0
+		2. Initialize RELOAD to desired value
+		3. Clear CURRENT (optionaL); <- 0 (or anything, register goes to zeros if tampered with)
+		4. write 101 to CTRL
+			default is the system clock speed: for the launchpad, 16 MHz
+			Can change internal clock via PLL (Phase Lock Loop)
+				Allows microcontroller to run at different speeds-- for the launchpad, up to 80 MHz
+		Can use this in Lab 4 by dumping NVIC_ST_CURRENT_R in an array and comparing two captured times.		
+
+
+
+
+
+
+

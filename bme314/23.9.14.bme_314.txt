@@ -1,0 +1,73 @@
+Notes for Guest Lecture
+Tissue Engineering - Dr. Janet Zolden
+BME 314- 9.23.14
+=======================
+
+Stem Cells
+	Overview
+		Promises and challenges in stem cell differentiation
+		Guidig stem cell differentiation
+		Microfluidic approach for induced pluripotent stem cells (iPSC)
+	Embryonic Stem Cells
+		Forms all three germ layers
+			Ectoderm
+				Skin, neurons 
+			Mesoderm
+				bone blood blood vessels
+ 			Endoderm
+				vascular tissue
+		Promise of ESC
+			High self renewal capabilities
+				diabetic pancreas can heal itself
+				muscular atrophy regrowth
+		Guiding ESC differentiation
+			Chemical Cues
+				growth factors, either adjacent cells or the cell itself				
+			Physical Cues
+				cell-cell interactions
+				cell-matrix interactions
+			Differentiation is difficult- chemicals exist in gradients
+				differentiation must be clean- only have desired cell type at the end
+					most of the time, you've got a mix of undifferentiated, progenital, and differentiated cells
+				*****undifferentiated cells in the body form benign cancer****	teratomas
+				cells die if just direcly injected in vivo
+					must keep cells alive and not be targeted by immune system
+				potential of complex tissue reconstruction requires multiple cell types, not just one
+	Guiding Stem Cell Differentiation
+		creating intracellular microenvironments for in-vivo vascular differentiation
+			behavior is different if cells grown on 3d scaffold vs. petri dish
+		Project: Reconstruct vascular tissue using embryonic stem cells
+			self-organizational properties
+			revascularization of ischemic tissue
+				usually, blood vessels are not made by the body after embryonic state-- only continue off of existing vessels
+			ischemic tissue: artery blockage causes tissue damage
+			Two main growth factors in vascular development
+				VEGF PDGF- VAscualar endothelial growth factor and platelet-derived growth factor
+				Idea: take 3d injectable hydrogel containing two different liposomes containing PDGF and VEGF, respectively
+					can control release of growth factors
+					hyaluronic acid is the hydrogel
+						natural polymer, degraded enzymatically by stem cells
+					forming liposomes
+						difference between two lipids is the melting temperature
+						higher mp: 55 c, lower mp: 23 c; lower mp willl release more quickly at room temp
+					result: cells DID organize into blood vessels
+					positive test in mouse-- injectable blood vessels reconstructed a completely blocked artery in the mouse
+		engineering internal microenvironments for non-viral delivery of siRNA
+			siRNA- prevents specific genes from being expressed (small interfering RNA)
+			used liposomes to contain siRNA
+			didn't work in 2D, tried in 3D scaffolds and it worked
+			Analsysis via FACS	
+			Next gene to test: KDR
+		siRNA can be used to control differentiation, but must have an extremely high knockdown (cell acceptance)
+	Induced Pluripotent Stem Cells
+		Taking an adult cell and transforming it back to a stem cell using only four genes
+		Potential for no immunity issues b/c therapy can be done with patient's own cells
+		Challenges:
+			Tumorigenicity and low reprogramming efficiency
+			Do IPSs actually behave like stem cells down the line?
+		Make the transformation more efficient and safe
+			microfluidic delivery
+			deliver the proteins directly-- skip the whole translation process
+				squeeze cell to form micropores and accept proteins
+	Future work
+		ips can be transferred back further, even before germ layer formation- naive stem cells	

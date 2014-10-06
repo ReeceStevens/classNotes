@@ -1,0 +1,44 @@
+Dr. Aaron Baker
+Endovascular Stents
+===================
+Stent design is complex, requires multidisciplinary approach
+	Blood vessel anatomy
+		endothelial layer, vascular smooth muscle cells (do expansion/contraction work), adventitia
+	Atherosclerosis	
+		buildup of plaque in arteries
+		eschemea- lack of blood flow
+		consequences
+			coronary heart disease
+			one person dies from CHD every minute
+	Clinical use of stents
+		inserted through femoral artery 
+		deploy balloon to open up vessel
+		balloon angioplasty (no stent used)-- rapid inflation/deflation of balloon
+	$7.4 billion spent on stents
+	900,000 people get coronary stents each year
+	Stent Design
+		Radially stiff to keep artery open
+		flexible to follow the path of the artery
+		minimize material to lower biological impact
+		coil/helix
+			flexiblity-good, radial stiffness: poor
+		slotted tube
+			flexibilty- poor, radial stiffness: excellent
+		wire mesh
+			flexibility-good, radial stiffness: good;
+		Considerations
+			high elastic modulus
+			low yield strength
+			fatigue resistance
+			biocompatible, radiopaque
+		metal usage
+			cobalt chromium vs stainless steel
+			cobalt 45% stronger -> thinner struts
+	Limitations
+		in stent restenosis
+			reocclusion of the arterial lumen
+			25% occurance
+	Drug eluting stents
+		polymer coating on stents allows delivery of chemotherapy drugs
+		reduced restenosis from 20-30% tp 10%
+	
