@@ -1,0 +1,95 @@
+EE 319K
+10.8.14
+=======
+Finite State Machines
+	If you can describe a system as a set of rules, you can consistently transform any input into an appropriate output
+	We want to devise a solution that will scale well once the number of states grows large
+		answer: software!
+	From State Transition Graph -> Truth Table -> LC3
+	Now: State Transition Graph -> Data Structure (programming construct) -> Engine (fsm)
+	
+	In lab 5:
+		Structs, or User-defined Data Types
+			ex. Student {
+					id
+					score
+					grade
+				}
+		Using previous knowledge, we would set this up as uint32_t id[50], uint8_t score[50], char grade[50]
+
+		It is more performance-efficient to clump the memory information about each student together-- this is what a struct does
+		
+		// We're declaring a new data type called "Student"
+		struct Student {
+			uint32_t id;
+			uint8_t score;
+			char grade;
+		} ; 
+
+		struct Student s1; // Declare a variable of a composite data type	
+		s1.id = 12345;		// Assigning vaules using dot notation
+		s1.score = 89;
+		if (s1.score >= 89){
+			s1.grade = 'A';
+		}
+
+		struct Student class[50]; // Declare an array of struct Student
+
+		// In order to not keep typing "struct Student",
+		typedef struct Student sType;
+		sType s2;
+
+		// If you wanted to add 2 points to every student's score
+		//bonus 2 pts to all students in class
+		int i;
+		char calcGrade(uint8_t);
+		for (i = 0; i < 50; i++){
+			class[i].score += 2;
+			class[i].grade = calcGrade(class[i].score);
+		}
+
+Traffic Light
+--------------
+Intersection of two one-way streets (southbound and westbound)
+
+		|  |
+	____|  |____
+    ____    ____
+		|  |
+		|  |
+
+Sensors on North and East-- act as switches. Connected to PE1 (north) and PE0 (east)
+West lights on PB5-3 and South lights on PB2-0.
+
+FSM:
+	See paper notes (too hard to type!)
+
+How long do you dwell in a state? You've got to have a delay for every state.
+
+FSM Engine (Moore) (output is a fcn of current state only)
+	fsmLoop
+		1. Generate Output based on Current State
+		2. Delay based on Current State
+		3. Read input
+		4. Change state based on current state and input	
+	Converting the fsm to code
+	
+	#define goN 0
+	#define waitN 1
+	#define goE 2
+	#define waitE 3
+
+	struct state {
+		uint32_t delay;
+		uint8_t output;
+		uint8_t next[4]; // you will have a next state defined for every type of input in the current state
+	}
+	typedef const struct state sType;
+	sType fsm[4] = {{300, 0x21, {goN, waitN, goN, waitN}}, {50, 0x22, {goE, goE, goE, goE}}, {300, 0x0C, {goE, goE, waitE, waitE}}, {50, 0x14, {goN, goN, goN, goN}}};
+	
+	Check out example traffic light program on Yerraballi's site for useful bit-specific port definitions
+
+	The entire engine, once initialized, is four lines of code!
+
+	For the lab, we will have an additional sensor (pedestrian sensor)
+
