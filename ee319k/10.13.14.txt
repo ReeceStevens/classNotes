@@ -1,0 +1,111 @@
+EE 319K Lecture
+10.13.14
+---------------
+
+Alternate implementation of Lab 5-- using pointers to access nextState array
+
+#define EVEN &FSM[0]
+#define ODD &FSM[1]
+
+When this is defined, you can access EVEN or ODD as a pointer since you now have their addresses. 
+This is called a "linked data structure"-- contrast to a "indexed data structure"
+
+Preprocessor directive-- we can use #define references to a data structure we haven't defined yet because the 
+preprocessor literally just replaces verbatim whatever we declare as the substituted value-- it doesn't try to
+understand it.
+
+struct student {
+	uint32_t id;
+	char grade;
+};
+typedef const struct student ST;
+
+ST S1;
+S1.id = 1234;
+S1.grade = 'A';
+
+// The DOT operator gives you access to attributes of a struct
+
+ST *sptr; // declares a pointer sptr which points to a type ST
+*sptr.id = 2456; // directly set the vale
+sptr->id = 2456; // use pointers to set the value
+
+* is called the "dereferencing operator"
+
+Pros of linked:
+	emulates the "pointer" idea of FSMs more closely than indexed data structures
+
+Cons:
+	Takes up more memory space
+
+--------------------------------------------
+|NEXT LAB- producing sound on the Launchpad|
+--------------------------------------------
+lab 6 notes
+	In C
+	Important concepts
+		Interrupts
+			Edge-Trigger interrupt	(strongly recommended)
+			SysTick interrupt
+	Will build a DAC circuit
+		Design build, and interface with launchpad
+	sound-> Piano with 3 keys
+
+Review of Interrupts
+	In LC3
+		Keyboard interrupt
+			Keyboard Status Register
+				Bit 15 and bit 14: 14 is the enable interrupts bit, 15 is set by KBDR when new character is ready to be read 
+			Keyboard Data Register
+				Holds ASCII value of key that was struck and sets bit 15.
+		If an instruction is being executed, suspend the instruction and run an interrupt service routine
+			Interrupt Vector Table directs where the PC jumps to at an interrupt
+			How does suspend work?
+				"SAVE STATE"-- we save the PC and the PSR
+		To return from an interrupt in LC3, you use the RTI command
+			essentially performs a "resume"
+			restore PC and PSR
+		This model is pretty much consistent across many different computers
+	In ARM
+		The interrupt table (location will be given)
+			entry 0- reset vector, pointing to reset handler
+			entry 15- SysTick vector, pointing to SysTick handler
+		Every time the SysTick current register goes to zero, the bit 16 flag on the SYSTICK_CTRL memory location is set.
+			analagous to the bit 15 on the LC3
+		
+		1. SysTick initialization
+			IEN -> 1 (systick specific)
+			Enable Interrupts (system-wide)	
+				In ASM, 
+					CPSIE I
+				In C, call
+					EnableInterrupts(); // you don't need to know the bit number!
+				Set priority code (optional)
+					
+		Save and Restore on an Interrupt - "CONTEXT SWITCH"
+		---------------------------------------------------
+	
+		Main(Thread mode)
+			Suspend
+				1. complete corrent instruction
+				2. Save state (PSR and PC and LR and R0-R3, R12)
+				3. In the IPSR, gets the interrupt number
+				4. LINK REGISTER IS SET TO THIS WEIRD MAGIC NUMBER CALLED 0xFFFF.FFF9
+				PC <- IVT[IntNumber]
+
+			All restoring is a part of the push/pop system
+
+	These were SysTick interrupts
+	Edge-Triggered interrupts!
+		Given a switch interfaced to PF4
+		We can tell the system to interrupt on a falling or rising edge of the square wave
+
+
+
+
+
+
+
+
+
+	
