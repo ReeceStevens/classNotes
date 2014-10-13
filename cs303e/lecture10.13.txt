@@ -1,0 +1,23 @@
+Functions
+	syntax:
+		def functionName:
+			body of the function
+
+	Some built in functions in python:
+		abs() -- absolute value
+		bin() -- returns a string with the binary value of whatever integer is passed to it (0b___)
+		bool() -- returns boolean value of any parameter
+			A = 65 (ASCII)
+			a = 97 (ASCII)
+		chr() -- returns the character associated with a passed integer value (ASCII)
+		float() -- convert to float
+		hex() -- convert to hex
+		list() -- convert a string into an array
+		max() -- finds maximum value of all passed numbers
+		min() -- you can figure this one out
+		oct() -- convert to octal
+		ord() -- returns the ASCII value of a passed character
+		pow() -- raises x to the power of y
+		round() -- rounds a number to a given number of places, defaults to integer if none specified
+		str() -- makes a string out of the argument
+		type() -- returns the type of the argument
