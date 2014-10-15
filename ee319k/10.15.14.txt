@@ -1,0 +1,67 @@
+EE 319K Lecture
+10.15.14
+---------------
+
+Lab 6: Sound Lab
+	Three buttons hooked up to microcontroller, one for A, C and G
+	Must produce a sine wave corresponding to that frequency
+	four-bit daq circuit
+		single output-- this is what's being connected to the speaker
+	We have a stereo speaker, but we'll only be wiring one of the sides and ground
+	DAQs
+		Takes a digital in and returns an analog out
+		Human Hearing Range: 20Hz-20kHz
+		If one cycle of your analog out is 1/20 seconds or faster, you begin to hear sound from the speaker
+		the musical note A = 440Hz
+		The frequency of the signal determines the pitch, but the quality of the sound is determined by the shape
+		A perfect sine wave creates a puretone
+	To create signal:
+		int i = 0;
+		while(1){
+			DAC_Out(i);
+			i = (i++) % 16; // Cycle through 0-15
+			delay();
+			// To make a sine wave without floating point numbers, we're going to create a sine table and read from it
+		}
+		uint8_t SinTab[16] = {8, 9, 11, 11, 12, 12, blah blah blah...}
+		use DAC_Out(SinTab[i]);
+
+	Determining the quality of a DAC
+		The more bits you can pass to the DAC, the more resolution you have of the sample size
+
+	Building a DAC circuit
+		see paper notes!
+
+	Industrial grade DACs use an R-R2 ladder instead of a weighted resistor network
+
+	Modular design
+		Break the program design up into modules
+		Will have public functions for other modules to access
+			DAC module
+				DAC-Init
+					void DAC_Init()
+				DAC-Out	
+					void DAC_Out(uint8_t input)
+			Piano Module
+				Init
+				In
+			Sound module (ISR internal) // DO NOT CALL SYSTICK HANDLER MANUALLY!!!!
+				Init
+				Play
+				
+		Structure
+			Push button -> piano interface -> main -> sound interface -> DAC interface -> DAC Hardware
+	Should use two interrupts
+
+	****PeriodicSysTickInts example! Look it up!!!****
+	Systick handler is fired off every time the counter reaches zero and interrupts are enabled 
+	define systick handler with the function that must be implemented
+	void SysTick_Handler(void){};
+	Runs like clockwork (no pun intended)
+	SYSTICK SHOULD HAVE NO LOOPS
+
+	Debug/Test Ideas
+	----------------
+	Hook up your earphones to the DAC
+	Use Audacity to check it!
+	You can use an oscilliscope as well
