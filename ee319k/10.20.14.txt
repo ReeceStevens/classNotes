@@ -1,0 +1,75 @@
+EE 319K Lecture
+10.20.14
+===============
+
+Loose ends on Lab 6
+-------------------
+Output being produced by interrupts
+
+	DAC_Out(uint32_t data) {
+		GPIO_PORTB_DATA_R = data;
+	}
+
+	this is being called by:
+	
+	void SysTick_Handler(){
+		DAC_Out(SinTable[i]);
+	}
+	
+	The delta T between interrupts determines the frequency of the sine wave,
+	and thus the pitch of the note being played.
+	Controlled by the SysTick reload value.
+
+	Edge-Triggered interrupts:
+		if your keys are on PE0-3
+			Find an example in the Ebook interrupts chapter (ch.12)
+			GPIOPortE_Handler(){}
+
+SysTick 	vs. 	Timer
+-----------------------------------
+24 bit				16/32 bit
+implicit			explicit
+acknowledgement		acknowledgement
+
+For songs, look up MIDI files
+
+--------------------------------------------------------------------------
+
+Lab 7 - assembly...:(
+-----
+This lab is a foundation for the next labs
+Have to write it in ASM...:(
+
+We're writing a device driver for a Nokia LCD screen
+Monochrome display, set range of pixels
+Components of This Lab
+	1. Device Driver
+	2. Local Variables in ASM (intelligently manage the stack)
+	3. Synchronization (fast device and slow device communicating)
+		- blind cycle synchronization (using this in Lab 7)
+		- busy wait synchronization (using this in Lab 8)
+		- interrupt based sychronization (using this in lab 9)
+	4. LCD Interfacing
+	5. Fixed-point numbers
+		multiply a whole number by some delta to get a desired decimel.
+
+Local Variables
+	Compare global vs. local variables
+	based on scope and permenance
+
+	Global variables are declared outside of any one function, while
+		local variables are inside a function or loop
+
+	Global variables are permanently declared; that is, for the duration of the program, 
+	the global variable is universally accessible and always declared.
+	
+	Declaring something as: 
+		static long myglob;
+	Restricts the scope of the global variable to JUST THIS FILE. this variable can't be accessed by any external file, only
+ 	by functions inside the file it is declared in (i.e., Global to File).
+
+	Local variables have local scope (i.e. only work in the function they're declared in) and have limited existence.
+	
+	Declaring a static local variable makes a Persistent Local Variable
+		it gets allocated in memory and DOESN'T MOVE. It can't be accessed by anyone except the function it is declared in.
+		Useful because every time that function is run, it will remember the variable and its last value because it has not moved.
