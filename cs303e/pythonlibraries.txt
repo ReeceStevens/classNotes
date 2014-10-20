@@ -1,0 +1,22 @@
+Lecture 10.20.14
+----------------
+
+Math Library
+	Inherent imprecision in math library
+	example:
+		y = Math.sqrt(4.0)
+		x = 2.0
+		(x == y) may not equal true!!!
+	
+		delta = 1.0e-18
+		abs(x-y) < delta
+		
+	Math.ceil(num)
+	Math.hypot(x, y) -- returns distance between x and y
+	Math.floor
+	Math.sqrt
+
+Strings
+	Negative indexing
+	Going backwards, the last character is -1 and the first character is -(len(string))
+	
