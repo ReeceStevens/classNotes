@@ -1,0 +1,75 @@
+EE 319K Lecture
+10.22.14
+===============
+
+Lab 7: Nokia Screen
+	Check the names of each port on your screen
+	Pin layout should be in the comments of Lab 7 program, already given
+	
+Local variables in ASSEMBLY (nooooo!)
+	Many processors only have one or two registers
+	This requires the usage of local variables
+	In C:
+		uint32_t func(uint32_t input){							Alternative 1: Use registers as locals
+			uint32_t myLocalVariable;			myLocalVariable RN 4
+			myLocalVariable = 0;								MOV myLocalVariable, #0
+			// In C, ties R4 to temp variable				
+			myLocalVariable = in*in;
+			return myLoclVariable;
+		}		
+	Alternate Solution 2: Use Stack for Locals *will always work*
+		four steps: binding, allocation, access, deallocation
+		
+	myLoc	EQU		0				# starting at zero, local variables become offsets on the stack (BINDING)
+	func	PUSH	{R4, LR}		# Pushes are essential for compliance, but must be at very outside of function so it doesn't disturb the bindings	
+			ADD		SP, #-4			# ALLOCATE 4 bytes of space in the stack for this variable (SP -= 4)
+			MOV 	R4, #0
+			STR 	R4, [SP, #myLoc]# Store the value of R4 into myLoc, which is an offset of SP that we defined (ACCESS)
+			MUL		R4, R0, R0		# Multiply the input (purpose of the function we are making
+			STR 	R4, [SP, #myLoc]
+			LDR		R0, [SP, #myLoc]# Compiler moves answer from stack to R0 to return value
+			ADD		SP, #4			# DEALLOCATE
+			POP		{R4, PC}
+
+	If you're dealing with anything other than 32 bit numbers, be sure to use the right LDR and STR functions (i.e. LDRH or STRH, etc.)
+		Stack allocation/deallocation would be a different number
+	For usefulness, we'll store the Stack Pointer we were using as reference in a register such as R11 (called "Frame Pointer"). This allows us
+		to continue to use the stack without worrying about losing our reference values.
+			The context of a subroutine (all its local variables and states) are called the frame, or Activation Record.
+
+Fixed point numbers
+	A way of dealing with fractions on a machine that doesn't support floating point numbers
+	PI = 3142 with a 10^-3 resolution
+	Print out individual digits and insert the decimal point where appropriate
+
+Nokia LCD Driver
+	Microcontroller connects to LCD using 7 pins (extra pin 8 on LED, this is the backlight-- you can hook it up if you want)
+	We're putting these pins on Port A
+	Screen uses SPI Protocol
+		also called SSI protocol, I2C protocol, etc.
+		Synchronous Serial Interface
+			Clock Pin - syncs the clock of both devices by simply sharing the clock (microcontroller drives the screen (master/slave config))
+			Reset Pin - simply a reset signal
+			SCE pin
+			DIN pin
+			D/C pin
+	Screen can be used as a character device or a graphic device
+		for 7, 8, and 9, it'll be a character device (text only)
+		48 px wide by 84px tall
+
+For Lab 7, we're making:
+	LCD_WriteCommand
+	LDC_WriteData
+
+	6 steps:
+		read SSIO-SR_R and check bit 4
+		if bit 4 is set, loop back to step 1 (wait for BUSY bit to be zero)
+		Clear D/C= PA6 to zero (D/C pin configured for COMMAND)
+		Write the command to SSIO_DR_R
+		Read SSIO_SR_R and check bit 4
+		If bit 4 is set loop back to step 5
+
+	Sychronization
+		Busy/Wait sync -- ask device if it is busy, wait until it is no longer busy
+		Blind-Cycle sync -- It can't tell you whether it's busy, you just have to know (??)
+
