@@ -1,0 +1,66 @@
+EE 319K Lecture
+10.27.14
+===============
+
+Review Lab 7 Concepts
+    LCD talks to microcontroller through seven pins (SSI/SPI protocol)
+    D/C pin: 1/0 (data/command)
+        Tells the LCD whether data or a command is being transferred
+    DIN - pin through which data is passed
+    Serial communication: one bit after another is passed (not writing all 8 bits at once)
+    SSIO_SR_R = Status register for LCD
+        Bit 4 => 1 is busy, 0 is free
+        Bit 1 => TNF bit; 
+    SSIO_DR_R = Device register
+        Data in this register is put into a shift register, which passes
+        data one bit at a time into the DIN pin
+
+Recursion
+    Example: n! = n * (n-1)!
+    We need the hypothesis and the base case
+    1! = 1 <= base case
+    
+    uint32_t fact(uint8_t n){
+        if (n == 1){
+            return n;
+        } else{
+        return (n * fact(n-1));
+        }
+    }
+    
+
+Lab 8
+-----
+    Built upon Lab 7
+    ADC
+    We're now implementing a slide bar, or potentiometer (variable resistors)
+        Linear potentiometer-- as we slide, resistance changes linearly
+        Logarithmic potentiometer-- as you can imagine, logarithmic incrase
+            Volume is a logarithmic potentiometer (b/c dB is a log scale unit!)
+        Ensure that your potentiometer isn't logarithmic!
+    
+    Now, we're taking an analog value from the potentiometer (0-10kOhms => 0-3.3V)
+    ADC - Analog Digital Converter
+        Creates a 12-bit digital value between (0, 4095)
+
+    Should display the position in centimeters on the LCD Screen!
+
+    Terminology
+        For a graph of voltage vs. time (digitization):
+            delta t between samples: time quantization, or sampling rate
+            amplitude quantization, or discretizing (12-bit)        
+
+    How frequently should we sample? Answered by the Nyquist Theorem
+        Based off the idea that every signal can be expressed as a summation of sinusoids
+        These sinusoids are called the "component frequencies"
+        Fourier Analysis and Fourier Transform!!!:D:D:D
+        for f_max, the frequency of the highest component frequency,
+        
+                                    Sampling Rate = 2 * f_max
+        
+        If you violate the Nyquist Theorem, you lose data! Called 'Aliasing'
+            'Wagon wheel effect': aliasing is occurring so that a wagon wheel looks like
+                   it is going backwards
+            
+
+         
