@@ -1,0 +1,78 @@
+Dr. Mia Markey
+Biomedical Informatics
+======================
+BME Case Competition?
+
+Biomedical Informatics
+    Definition: effective uses of biomedical data, information, and knowledge for problem solving in the health field
+        Essentially-- make good use of health data
+    Theory, methods, and processes for generating, storing, retrieving, using and sharing data
+        from computing, communication, and information sciences
+    Can be relevant across many different scales (cellular to population level)
+        ***incorporates social and behavioral sciences to inform design***
+    biomedical informatics doesn't equal bioinformatics (bioinformatics assumes a scale limitation)
+       
+    Decision Support System:
+        provides clinicians, staff, patients, and other individuals with knowledge and person-specific information, intelligently filtered
+        and presented at appropriate times, to enhance health and health care
+    Combining knowledge and person-specific information
+        selective information usage
+    
+    How do you design such a system? How do we evaluate it?
+        
+    Notation for Evaluation
+        Confusion Matrix
+            Prediction vs. Truth-- shows accuracy of model in a binary sense
+            Model is applicable because most decisions are binary-- do or don't.
+        We can't just calculate accuracy as a raw number
+            False Positive
+            False Negative
+            HUGE differences in real-life effects (false negatives can be far more harmful than false positives)
+        Calculate Prevalence
+            Percentage of actual positives
+            In a normal population, prevalance can be very small
+        Accuracy is related to your prevalence, so it's not a good numerical measurement of success
+        Need a different numerical model
+            Separates the two kinds of errors and don't depend on the prevalence
+            Sensitivity - number of samples classified as positive that were actually positive divided by the total positive cases
+            Specificity- number of samples classified as negative that were actually negative divided by the total negative cases
+            MUCH BETTER mathematically
+            Lacks bias or dependence on prevalence; it's a property of the system itself
+        Accuracy = P(+|D)P(D) + P(-|D^c)P(D^c)
+        Other measurements
+            False negative fraction-- Sensitivity + FNF = 100%
+            False positive fraction-- Specificity + FPF = 100%
+            Positive predicted value-- depends on prevalence: correct positive predictions over total positive predictions
+            Negative predictive value-- depends on prevalence: correct negative predictions over total negative predictions
+       Sensitivity: P(Positive Test | Disease)          (notation: Probability(some condition | given this condition))
+       PPV: P(Disease | Positive Test)
+       analagous for NPV and Specificity
+
+        Development: use Sensitivity and Specificity
+        clinical decision making: use PPV and NPV
+        Bayes Rule allows us to relate all these conditional probabilities to each other
+        Because prevalance is so low in most cases, requires EXTREMELY accurate systems. 
+
+        Decision Variable
+            an ordinal or real-valued variable that we will use to make our decision about positive or negative
+           Receiver Operating Characteristic curve (ROC)    
+                based off applying thresholds on the decision variable
+                trade off between sensitivity and specificity
+           the ROC can plot many confusion matrices based on varying decision variables
+           
+           Applying a continuum of decision variable thresholds allow us to evaluate many different confustion matrices
+            We only need to use decision variable values that correspond to data points in our set (no sense in taking points in between data)
+           
+            in a ROC curve, y=x is the worst curve (straight-up guessing) and outlining the y axis and top x axis is the best curve
+                Area Under Curve (AUC): 0.5 (worst) to 1.0 (best)
+                However, some curves can have the same AUC but different shapes
+                If we want to weight sensitivity more than specificity, or vice versa, we need to look at shape
+                    Note: statistical comparison is easy for AUC but nigh impossible for curve analysis
+            
+        Ultimately, we have to choose some operating point-- we have to make a decision!
+            use ROC curve to figure out what tradeoffs are worth making
+        Extensions: using ROC curves with respect to location, multiple signals, etc.
+        Challenge: establishing truth; dealing with more than 2 classes
+        Most Important goal:
+            How will an actual human use this tool? Affects device accuracy        
+
