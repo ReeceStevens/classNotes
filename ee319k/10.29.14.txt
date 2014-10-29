@@ -1,0 +1,85 @@
+EE 319K Lecture
+10.29.14
+===============
+
+This next test: 60 minutes of programming time
+
+Lab 8 Principles
+----------------
+    Must sample at the Nyquist Theorem frequency
+    Quantization of time (samples) and amplitude (precision)
+        What is the smallest resolution you can measure?
+    Analog device/variable resistor; converts *voltage*
+    
+    What does an ADC (Analog-Digital Converter) do?
+        Successive approximation (SAR chip)
+        Takes V_in, runs through a comparator (passes a zero or one) with a DAC, does logic
+
+        Uses guess/check method; guess goes into DAC and is compared to the V_in; Guessing using binary search method
+            0 = low, 1 = high or equal;
+            each decision is a binary digit!!!!!!! aslkdjfa;lsdkjfa;lsdkjf
+            Time for conversion
+        
+        ADC_Initialization
+            12 ADC Pins/channels on the Launchpad (when configured for AFSEL)
+            AIN0-AIN11
+            PE2 (Lab 8)= AIN1
+            PD3 = AIN4;
+            Can use TExaS fcn to use oscillliscope.
+    
+            In eBook, PE4 = AIN9;
+            
+            Initializing steps (prefix these register names with "ADC0_")
+                1-5. GPIO_PORTE
+                    clock, direction register, AFSEL (set to 1), DEN set to 0 (not digital), AMSEL to one
+                6. Enable ADC clock (SYSCTL_RCGCD_R)
+                    Enable bit 16, wait a few cycles
+                7. Select speed
+                    125 (low error), 256, 512 K, 1 (high error) M Samples/Second
+                    bits 9-6 in SYSCTL_RCGCD_R
+                8. Choose sequencer (we won't be worrying about internals)
+                    SSPRI (15-12 bits)
+                9. Disable ADC
+                    Pin 3, ACTSS register => 0
+                10. Configure Trigger
+                    Trigger Options
+                       0. software initiated ***What we're using***
+                            EMUX register
+                                bits 15-12 => 0
+                       1. SysTick Timer
+                       2. PWM
+                           Can generate a square wave; leading edge or falling edge interrupts
+                       ... 
+                       7. Always keep taking samples. 
+                11. Specify Channel (I/P Source)
+                    SSMUX register, last 4 bits = 0001 (selecting AIN1, PE2)
+                12. Turn Temperature Sensing off
+                    SSCTL, last 4 bits in decreasing order: temp.sense(TS) => 0, IE bit => 1, END => 1, DO bit => 0
+                        IE bit says that when the ADC is done converting, this flag will be set to indicate the conversion has been completed
+                        DO bit = "Differential Mode"; only reads a signal if it has changed              
+                13. Enable ADC
+                    ACTSS Pin 3 => 1
+        
+            Lots of stuff to remember... check Yerraballi's Ebook for an example written in C of ADC initialization.
+
+        *note- this is pseudocode and doesn't write safely to these registers. don't take this as gosple*
+        uint32_t ADC_In(void){
+            // 1. Initiate sample grab
+            ADC0_PSSI_R = 0x80; //start sequence
+            // 2. Do a busy wait until conversion is complete
+            //    A 0 in PSSI means it is still busy, so wait
+            while (ADC0_PSSI_R == 0x00){
+            }
+            // 3. result = ADC0_SSFIFO3_R & 0xFFF;
+            // 4. Acknowledge
+            //      We can't directly set the flag, so we'll use a clear register
+            //      ISC register = 0x08; This will clear the bit flag in PSSI
+            return result;
+        }
+        
+        Incremental Development
+            Use the Print.s, IO.s, LCD.s code that you wrote in Lab 7 and copy it into Lab 8
+            We're working in Lab8.c file
+                
+
+
