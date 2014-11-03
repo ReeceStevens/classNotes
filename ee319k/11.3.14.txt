@@ -1,0 +1,31 @@
+EE 319K Lecture
+11.3.14
+===============
+
+Exam 2 Review
+	Strings, Arrays, FSM
+		How did the struct work? How did we access its values?
+	Activation Record and Parameter Passing
+		When a function calls another function and passes it a variable, 
+		the callee gets a copy of that variable in its activation record. 
+		When the value in the callee is altered, the original variable that
+		was passed to the function remains unchanged. 
+	Accessing values with pointers
+		int8_t *pt;	// The pointer itself is still 32 bits; what it points to is 8 bits
+		To pass the address of a variable, use &x
+	Create a pointer to a given variable
+		x = 42;
+		uint32_t toX = &x;
+	Passing an Array
+		void subArr(int8_t Arr[4]){ // NOTE: size of array is not checked by the compiler, the number in the braces means nothing
+			// simply passes a pointer to the zero location
+			// subArr(InArr) is equivalent to saying subArr(&InArr[0])
+			// for inputs to this function, you can say int8_t Arr[], int8_t *Arr, int_8 Arr[4], they're all equivalent
+			uint32_t i = 0;
+			for (i = 0; i<4; i++){
+				Arr[i] += 10; 			// Index operation
+				*Arr += 10;
+				Arr += 1; // C knows the declared size of the array, so +1 is always valid
+			}
+		}	
+
