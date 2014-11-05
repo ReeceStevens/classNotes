@@ -1,0 +1,94 @@
+EE 319K Lecture
+11.5.14
+===============
+
+Exam notes
+----------
+	- 60 minutes
+	- Make sure the TA signs off with your score on the cover sheet (my responsibility!)
+	- Turn off all alerts/notifications
+		- Can open browser to download the file and open a calculator
+	- All questions must be phrased as a yes or no question
+
+Lab 8
+-----
+	- ADC
+		- Hardware uses a SAR (Successive Approximation)
+		- 12 ADC channels (Ain0 - Ain11)
+			- We're using PE2 (Ain1)
+		- ADC in is a 12-bit ADC converter
+			- For every analog signal you receive, you get a number between (0 - 2^12-1)
+			- Our analog device is a slide bar (variable resistor)
+				- Convert this to a voltage between 0-3.3V
+				- Display position in cm on the LCD display
+			
+	- Interfacing a slide-potentiometer
+		(symbol in circuit diagrams is an arrow pointing to a resistor)
+		Total resistance = 20 KOhm
+			two resistors, R1 and R2, add together to make 20 KOhms
+	
+		Simply a voltage divider: Vin = voltage across R1
+			(R1 / (R1 * R2)) * 3.3V
+				- R1 = 0 => 0V, Digital = 0
+				- R2 = 0 => 3.3V, Digital = 4095
+				
+							Vin
+							||
+							\/
+		GND |_____/\/\/\/\___________/\/\/\/\____________| 3.3V	
+
+		converting mechanical or physical signals to circuits is a *transducer*
+			- Pressure, Temp, Speed, etc.
+
+	-Data Flow Graph
+		See paper notes!
+	
+	- Call Graph
+		See paper notes!
+
+	- Fixed Point Revisit
+		Why do we use fixed point numbers?
+			Value stored as an integer times an offset (i.e., 0.4 = 40 (0.01))
+			We can express non-integer values even though we have no floating point support
+				OR FP support is really slow-- fixed point nums are much faster
+		When can we use them?
+			When the range of values is known and fairly small
+		Example
+			Decimal Fixed Point
+			C = 2*PI*r			2PI ~ 5.283 => convert to fixed point
+			C = 6283 * R / 1000;
+				Note: do division last, as you lose precision
+			Binary Fixed Point	
+			V = PI * R^2 * L	if L, R, and V are fixed point
+				R = I * 2^(-4) 		L = J * 2^(-4) 	V = k * (2^(-8)) 	PI = 100 * (2^(-5))
+			K = (100 * I * I * L) >> 9
+
+	- Incremental Development
+		1- Get ADC working (main just runs ADC_Init; while(1){Data=ADC_In();})
+			- Watch the Data value and make sure it makes sense
+		2- Do calibration
+		3- Write a convert routine based on calibration data
+		4- Make it responsive using SysTick and mailbox
+	
+	- Calibration
+		Get your data from watching in Keil
+		Graph distance (gathered visually) v. data value (gathered in Keil)
+		Try to make a curve fit for distance v. data value (y = mx - b)
+			- Note: m and b will be fractions.
+				ex. if m = 1.7283 and b = 32.056
+					m = 17283 / 10000
+					This is really slow-- if you made it a power of 2, you can use shifts and it'll be lickety-split!
+					Try m = 17283 / (2^k), where k is some power
+					for convenience, you can rewrite your calibration equation as y = (x*data - q) / 2^k
+						only one shift! Man, we're fast!
+	- Make it all work using a mailbox
+		Called "synchronization" in the book
+			Producer-Consumer problem
+				ISRs ought to be *fast*
+				Call ADC_In and send data to mailbox (simply a global variable)
+					Sets ADC_Status flag to 1, indicating a new sample is available
+				Main (foreground thread) checks for the ADC_Status bit
+					Once it's set, it'll read the data from mailbox and converts it, sending
+					the result to the LCD display	
+
+			
