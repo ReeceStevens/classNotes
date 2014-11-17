@@ -1,0 +1,35 @@
+EE 319K Lecture
+11.17.14
+===============
+
+Possible software FIFO solutions
+    Use global counter, but make it thread safe by making it a CRITICAL SECTION
+            DisableInterrupts();
+            counter++;
+            EnableInterrupts();
+    GetI/PutI solution never competes for the same resource
+        
+Lab 10
+------
+    Goal: Bring it all together 
+        - GPIO, external and internal switches, LEDs
+        - SysTick timers and at least one other timer
+        - DAC (4-bit will do, but can do 6- or 8-bit)
+            Take any WAV file and turn it into a raw sample array
+        - ADC (use slide pot as a control)
+        - LCD (text and graphics)
+        - Game Engine
+    missing: FSM and UART
+        - add multiplayer? UART
+        
+    Software Concepts
+        - 2D Arrays
+        - Structs
+        - Linked Lists
+        - Callback
+
+    Logistics
+    ---------
+        Not a lab checkout
+        In-class competition (Wed. 12/3)
+        
