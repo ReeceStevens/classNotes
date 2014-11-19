@@ -1,0 +1,50 @@
+EE 319K Lecture
+11.19.14
+===============
+
+Lab 10
+------
+**** Proposal for alternate game due by this Friday ****
+    Must contain the basic ideas of the labs
+    If turn based, is there an AI?
+    
+    Space Invaders example
+        - Sound
+        - Graphics
+        - Game Engine
+    First: Graphics
+        48x84 pixels in the Nokia screen
+        Origin is the top left of the screen
+
+            +------------------+
+            |                  |
+            |                  |
+            |                  |
+            |                  |
+            +------------------+
+        Game objects are called Sprites (any object that has a graphics context)
+            printBMP(x,y,BMPArray,0);
+                F-white, 0-black
+            Bitmap Arrays
+                jpeg and gif are compressed formats-- pixels aren't stored raw
+                .bmp is a RAW file format: 24x36 / 2 bytes (four bits per pixel)
+                someimage.bmp (standard format)
+                offset 18 and 22 (bytes) in a bmp file store the width and height of a particular image
+                
+            struct state {
+                long x,y;
+                long life;
+                char *image[2];
+            }
+
+    Sound
+        Make a raw sample of sound
+    Game Engine
+        Random number generator
+            problem: least significant bit is almost cyclical
+                try looking at the higher order bytes (they're a lot more random)
+                shift the result by 24
+        
+    Ch. 15 of e-book covers game engine construction
+        Edge triggered interrupts for buttons or controls will make your controls more responsive than using 30Hz timer
+        
