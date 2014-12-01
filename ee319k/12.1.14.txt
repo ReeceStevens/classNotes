@@ -1,0 +1,71 @@
+EE 319K Lecture
+12.1.14
+===============
+
+1. All Homework grades are final this week (wince)
+    a. Optional homework: Spring 2014 Final Exam DUE AT FINAL
+        replaces one missed homework
+    
+Review for the Final
+--------------------
+    Pointers (Parameter Passing)
+    Linked Lists
+        struct Student {
+            uint32_t id;
+            uint8_t score;
+            struct Student *next;
+        }
+        typedef struct Student sType;
+        sType &sList;
+        // Last element in list points to NULL
+        // sList is the address of the first student in the class
+
+        uint8_t Avg(sType *sl){
+            uint32_t sum = 0; count = 0;
+            while (sl){
+                sum += sl->score;
+                count ++;
+                sl = sl->next; 
+            }
+        }
+        if (count != 0){
+            return (sum/count);
+        } else {
+            return 0;
+        }
+
+        Arrays versus Linked Lists
+            Lookups (searches) dominate array
+            Lots of changes: add or remove elements within a list
+            
+
+    Structs
+        // Declaring a new data type
+        struct Student {
+            uint32_t id;
+            uint8_t score;
+            struct Student *partner; // You have to use a pointer to avoid making an "infinite definition"
+        } 
+        struct Student joe, mary;
+        joe.id = 123;
+        joe.score = 75;
+        joe.partner = &mary;
+    Bandwidth (in the context of UART)
+        UART- Baud Rate
+            setting bit time (delta T)
+        Structure of a communication frame
+        STX, END, 8-bit payload
+        Bandwidth = useful num of bits  * baud rate; 10 total number of bits
+    Fifo
+        Circulaar queue
+            Ensure that any modicfications to the pointers are modded so you stay in the fifo
+            Be sure to disable interrupts for the line of code where you edit a globa variable (i.e. the count variable) 
+
+What to Expect when you're EEing
+--------------------------------
+    - No memorization, but some lookup in addendum
+    - No NZVC bits
+        Overflow on arithmetic is not on exam
+    - FSM will be on the test (both Moore AND Mealy)
+    - Linkage (ASM to C and vice versa), AAPCS Convention
+    - Local Variables in ASM
