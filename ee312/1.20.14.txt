@@ -1,0 +1,28 @@
+EE 312 Lecture 1
+1.20.15
+================
+
+Assignment: Exercise 0 (due)
+No textbook, but a CPP reference is good
+Check syllabus (on Canvas)
+
+Software:
+can we just use linux???:(
+
+https://lennon.ece.utexas.edu/ee312/sp2015
+www.dreamspark.com
+www.tortoisesvn.net
+
+Recitation sessions- mandatory attendance
+
+Programming Assignments
+-----------------------
+
+first assignment is pretty large, and it's due two weeks from now
+
+Office Hours:
+MW 9:30-11:30AM, TTH 11:30-1PM, 2-3ish
+Office: POB 3.442
+
+Project 1: no new knowledge required
+	use it as a gauge for how much you need to invest in the course
