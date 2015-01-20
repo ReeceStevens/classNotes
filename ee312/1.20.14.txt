@@ -26,3 +26,22 @@ Office: POB 3.442
 
 Project 1: no new knowledge required
 	use it as a gauge for how much you need to invest in the course
+
+Must change password to SVN user before submitting assignments
+default password: ee312sp2015
+
+Visual Studio instructions:
+	create new empty project, add .c source files
+	running the built project is in the DEBUG-menu
+	Once you confirm the largest number, update the comments in the header of the file
+
+	floating point weirdness: precision is like scientific notation. eventually it rounds and 
+	no longer increments the same way
+
+	float has 24 bits of precision (7 digits)
+	problem: 0.1 cannot be exactly represented in binary, so floating point won't work as expected
+	(don't fix the program, just write that it's not exactly equal in the comments
+
+Change SVN password:
+	https://lennon.ece.utexas.edu/ee312_admin
+
