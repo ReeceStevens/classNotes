@@ -1,0 +1,123 @@
+EE 319K Lecture
+11.12.14
+===============
+
+Lab 9- Communication
+--------------------
+    Transmit side- reads value from ADC like in Lab 8.
+        Instead of putting the value into a mailbox, it formats a message and sends it over the transmission line
+    Receiver has a UART1 ISR and dumps the message into a buffer (FIFO buffer)
+        Displays the received data into the LCD
+
+    Expected to write the program as bi-directional; i.e., must work if we reverse what program is using the slide pot and display
+        If we hooked up both hardware to both microcontrollers, it would still work
+    Work on the tramsit and receiver code separately, then merge them together (only writing one total project)
+    
+    Background info
+    ---------------
+        UART: - baud rate
+              - frame
+              - initialization (Key: enabling both transmit and receive in the UART1_CTL_R = 0x0301)
+                    For the example init in the slides, everything is calculated for 50 Hz, but we're running at 80Hz (so recalculate accordingly)
+                    Also, change everything to be UART1 not UART0, and use Port C instead of Port A
+              - Send and Receive (PC4 is receive, PC5 is transmit)
+                    The message that will be sent will be an 8 byte message
+                        if we want to send "1.270 cm"
+                            send  ETX CR 0 7 2 . 1 STX
+                              ETX- end transmission
+                              CR- carry return
+                              STX- start transmission
+
+                    Hardware FIFO (ex. we're transferring 0x31)
+
+                    Shift Register
+                        E00110001S ----> TxD (one bit at a time, at the speed of the baud rate)
+                            (S = start bit, E = end bit)
+                    
+                        FIFO
+                       +---------+
+                       |  16     |
+                       | elements|
+                       +---------+
+                
+                    UART1_DR_R  
+
+                    It's easy to overflow the buffer since we can write much faster than the baud rate
+                        => Check the TXFF (Transmit FIFO Full Flag)
+                            
+
+                    void UART1_Outchar(char data){
+                       // Check flag; 1 means full, 0 means space
+                       while(UART1_FR_R & 0x0010){} 
+                       UART1_DR_R = data;
+                    }
+
+                        RxD ---> E[payload]S (determined by baud rate)
+                    
+                        Receiver FIFO
+                       +---------+
+                       |  16     |
+                       | elements|
+                       +---------+
+                
+                    UART1_DR_R <- we read from this
+                        Check the RXFE (Receiver FIFO Empty flag)
+                    
+                    char UART1_InChar(void){
+                        while (UART1_FR_R (RxFE flag) == 1){}
+                        return (UART1_DR_R);
+                    }
+            
+                    Types of read errors that can occur on the receiver end
+                     ** 1. Overrun error
+                            If the buffer is full and the receiver program hasn't read any yet, the next value will push the oldest value to DR_R
+                            If another frame comes in after that, then the 18th frame (most recent) is dropped entirely.
+                            Each element in the payload has four error bits, and if there's an overflow error that bit will be set.
+                        2. Parity Error
+                        3. Frame Error
+                        
+                    We will also use a FIFO software buffer (only going to be on the receiver side)
+                        Background thread (UART1_Handler())
+                            Producer
+                        Foreground thread (main())
+                            Consumer 
+                        If the producer is faster than the consumer, you need a FIFO buffer
+                        
+                    Implementing a Software FIFO Buffer
+                    -----------------------------------
+                    #define fsize 20
+                    static int32_t fifo[fsize]; (static prevents any other file from accessing this fifo; global only to this file)
+                    int32_t getI, putI;
+                    // putI is the index of the next position that an element can be put in
+                    // getI is the index of the oldest element                        
+
+                    void fifo_Init(){
+                        getI = 0;
+                        putI = 0;
+                         
+                    }
+                    
+                    // Returns a success or failure if buffer is full 
+                    int8_t fifo_Put(int32_t data){
+                           if ((putI + 1) % fsize) == getI){
+                                return 0;
+                           }
+                           fifo[putI] = data;
+                           putI  = (putI + 1) % fsize; 
+                    }
+
+                    // Returns a success or failure if buffer empty
+                    int8_t fifo_Get(int32_t *dptr){
+                        if (getI == putI){
+                            return (0); //empty buffer
+                        }
+                        *dptr = fifo[getI];
+                        getI = (getI + 1) % fsize;
+                        return 1; 
+                    }
+
+                    Other possible option: use a count variable and just keep track of what you put on your buffer
+                        DOESN'T WORK: Race Condition.
+
+
+

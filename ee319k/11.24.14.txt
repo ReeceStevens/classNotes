@@ -1,0 +1,54 @@
+EE 319K Lecture 
+11.24.14
+===============
+
+Notices
+    1. Homework- get any corrections done by the last week of class
+        Last 2 are practice exams, due Dec 1st
+    2. By next week, all lab scores must be up-to-date and final.
+    3. No class this Wednesday (yay!)
+    4. Lab 10
+        a. Certification
+            Due 7PM on 12/2 (Tuesday)
+            Classification for "Supreme" (blue) or "Wonderful" (white)
+        b. Competition (Wednesday in class)
+            Both partners must be present
+    
+Playing Music
+    use the wavconvert.m file to transform .wav files into raw sample values
+        Inputs are the file in .wav format and the precision (four bit dac or higher, etc.) 
+    Put a sentinel at the end of the sound sample that will tell you when the song is done playing and deactivate SysTick interrupt
+   
+Topics
+    What does an Operating System look like?
+        Can run and load software on the fly
+        System Calls:
+            Operating system code
+        * Manage Resources  
+        * Illusion of running continuously
+            Each task (process) goes through three states: ready, running, waiting (life cycle of a process)
+            Ready List (linked list of tasks in the OS)
+                you need a strategy to pick a task (Scheduler)
+                Strategy to pick what process runs next is the role of the scheduler
+                    Linux, MacOS, Windows
+                    1. Round Robin (RR) (just go one after the other and then loop back when done)  
+                    2. Shortest Job First (SJF)
+                    3. Real-Time: Earliest Deadline First (EDF)
+                    4. (most popular) Multi-level Priority Queue
+
+    What is a ready list made of?
+        Task Control Block (one for each process) (just a big struct)
+            Saves the registers (R0-R15) (including the PC and Stack Pointer)
+            Saves its state (ready, running, waiting, dead)
+            Priority
+            Time
+            Memory Information (where is the program in memory)
+        Interrupts manage when programs stop executing
+        
+        Scheduler is simply a timer handler (ISR)
+            timer handlers are fired when a new program is to be run
+            Updates to the new stack pointer, then pops the new LR so that BX LR goes to the program to be resumed
+        
+        Shell-- allows you to start new processes
+    
+        Everyone shares libraries, which make predetermined calls to the OS

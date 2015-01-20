@@ -1,0 +1,85 @@
+EE 319K Lecture
+11.10.14
+===============
+
+Lab 8
+-----
+    Clock (ADC)
+        Legacy version vs. new version
+        Must use the newer versions
+            Legacy versions are registers RCGC2, etc.
+            RCGCGPIO is the newer version
+    Increase the delay when you're starting the clock for the first time!***************
+    
+Lab 9
+-----
+    Communication -> point-to-point network
+    UART
+    FIFO (buffer, both hardware (engage) and software(program))
+    Interrupts
+        SysTick interrupt
+        UART receiver interrupt
+    Communication
+        Think about the internet
+            Lots of machines on the network, both consumer computers and servers
+            Made up of a bunch of nodes or routers
+                They're interconnected in some way
+            Each node exercises communication protocol
+                For wireless internet, 802.11 wireless protocol
+                Transcontenental, SONNET Protocol
+            The Standard Protocol is determined by the nature of the connection between routers.
+        In the grand scheme of things, ALL communication is ultimately point-to-point
+        
+        Our launchpad can communicate with the outside world using UART (Universal Asynchronous Receive-Transmit)
+            (also USB communication)
+        UART
+            - RS232
+            - ~50 years old
+            - Originates from the Mainframe/Dummy terminal setup
+            - 8 UARTS
+                    PA0 and PA1 are the receive and transmit UART0 wires to the debug chip
+                    UART1 is on PC4 and PC5 (receive and transmit); communicates with another launchpad and shares a common ground (layout for lab 9)
+                    UART2 on PD6, PD7 has a built in Max3232 chip; allows you to connect to a distant machine greater than 50 feet away
+            Serial Asynchronous Communication
+                asynchronous in that they aren't in step or share the same clock
+                Serial in that bits come in one after the other in rapid succession
+    
+            Sender to Receiver only: synplex (as opposed to duplex) communication
+                Connect PC5 on one board to PC4 on another      
+                3.3V (high) means idle
+                When communication begins, start bit is issued (transition from 1 to zero)
+                Bits come in 8 at a time, starting with bit zero
+                Ends with a stop bit, which restores the idle state
+                Speed of communication relies on the agreed value between the two machines of the bit time.
+                bit time = 1/(baud rate)
+                baud rate = bits per second; rate at which bits propogate over the link
+                You never get the exact baud rate because you have to have a start and end bit
+                    => Bandwidth = ((useful bits / frame) / (total bits / frame) ) * baud rate
+                        Frame = unit of communication (8 bits plus start and end bit)
+                        ~ 80% usage of the network
+                Optional addition: parity bit
+                    Lets you know if there was an error in transmission for that frame
+                    Allows you to recover from communication errors to a point
+                    Odd Parity - set if the total number of 1s in the frame is even (making the total number odd)
+                    Parity checks are always followed by a request for retransmission
+                    Not used much anymore, since most errors on the internet are "burst" errors
+                
+            ENSURE THAT YOU HAVE THE SAME BAUD RATE ON BOTH COMMUNICATING MACHINES
+                Common Lab 9 error
+        Setup: UART Init
+        
+            UART1- PC4, PC5 (Receive, Transmit)-- common ground must be connected
+                1. GPIO PortC configuration (clock, wait, DIR (4 is input, 5 is output), AFSEL => 1 for both, AMSEL => 0 for both, ***GPIO_PORTC_PCTL_R = 0x00220000***)
+                    Get the PCTL number from table 11.3 in the E-book ("column number")
+                2. UART Specific stuff
+                    1. Clock on, delay
+                    2. Disable UART
+                    3. Set Baud-Rate
+                        E-clock / (16 * targetBR);
+                        Integer <- int. division
+                        Fractional <- fixed point binary number with a resolution delta = 2^(-6). take the decimal and * 64 to get this value.
+                    4. LCRC (8-bit, no parity, single stop bit, use a hardware FIFO)
+
+                    5. Enable UART 
+            
+    
