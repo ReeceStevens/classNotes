@@ -45,3 +45,12 @@ Visual Studio instructions:
 Change SVN password:
 	https://lennon.ece.utexas.edu/ee312_admin
 
+For project 1:
+	integer variables and arithmetic
+	local and global variables
+	functions
+	parameters for functions
+	loops
+	if/else
+	arrays
+	strings

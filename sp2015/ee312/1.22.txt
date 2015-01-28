@@ -1,0 +1,62 @@
+EE 312 Lecture
+1.22.15
+==============
+
+int x; // size depends on the machine
+int32_t x; // size is set, 32 bits. Get these types with #include <stdint.h>
+uint32_t y;
+int64_t z;
+
+char < short < int < long < long long
+int and long are typically the same on a desktop environment
+
+Basic starting program: find the minimum value of an array
+
+int min(int x[], uint32_t n) {
+	uint8_t k = 1;
+	int min = x[0];
+	while (k < n){
+		if (x[k] < min){
+			min = x[k];
+		}
+		k ++;
+	}		
+	return min;
+}
+
+Steps to solve a problem:
+	walk through it by hand
+	remove all shortcuts 
+	identify all variables that you'll need
+	identify the types of all variables you need
+
+void makeUpper(char s[]){
+	uint8_t k = 0;
+	while (s[k] != 0){
+		s[k] = 'A' + s[k] - 'a';
+		k ++;
+	}
+}
+
+Problem: this function is only working for a nice, general case. 
+
+void makeUpper(char s[]){
+	uint8_t k = 0;
+	while (s[k] != 0){
+		if (('a' <= s[k]) && (s[k] <= 'z')){
+			s[k] += 'A' - 'a';
+		}
+		k ++;
+	}
+}
+
+Pointers and Arrays
+-------------------
+
+C doesn't give a crap about arrays
+
+int x[10] = {1, 5, 3, 2};
+printf("%d", x); // x is defined as &x[0], will print an address
+x = 42; // in truth, this is saying one number is equal to another (throws error)
+x[2] = 42; // x[k] is defined as *(x+k)
+
