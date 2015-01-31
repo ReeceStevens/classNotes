@@ -1,0 +1,118 @@
+EE 312 Lecture Notes
+1.27.15
+====================
+
+We can run the grader on our project! Check to see when that becomes available.
+
+Today's topic: Pointers
+-----------------------
+int x; // When you create a variable, compiler allocates space in memory. 
+    // Variable Name: shorthand to reach address
+    // Type: size of memory allocation, operations which are permitted, how the info should be interpreted
+Note: float is basically useless b/c of overwhelming error, so use double (unless in signal analysis)
+
+x = 5; // Store instruction
+print x; // Load instruction
+
+int* P; // allocate a 32 bit number
+    // What operations can you perform?
+    p = 5; // store
+    print p; // load
+
+Fundamental Pointer Ops
+-----------------------
+4 Ops in C
+----------
+*P          - Dereference operator
+P + K       - add integer K offset
+P == Q      - Compare pointers
+P - K       - Subtract pointers
+// *** K is scaled by sizeof(typeof(*p)) ***
+
+Example: P[k] actually means *(P+k)
+         P != Q means (!(P==Q))
+
+2 More in C++
+-------------
+++P
+--P
+(we aren't learning about those right now)
+
+One more operation, unique to C but available to all variables:
+&x          - Addressive operator (tells us the address of whatever variable)
+
+Deciding between P, *P, and &P-- making pointers easy!
+
+Draw a picture:
+
+int x = 42;
+int* p = &x; (It's pointing to x!)
+Changing the value of p means the head of the arrow is pointing to whatever you assign
+
+Seriously, draw a picture! It'll help you keep track of what is pointing to what!
+& makes the arrow. * chases the arrow.
+
+Taking a close look at fundamental pointer op (P +- K):
+1000    x:42
+1004    p:&x
+
+Adding 1 to a pointer really adds 4 so that you aren't pointing inbetween variables
+
+int x[10]; // Assume &x[0] = x = 1000
+           // &x[1] = 1004
+int* p = x;
+p = p + 1; // *** increment is scaled by sizeof(typeof(*p)) ***
+           // The type you declare for the pointer determines how much pointer arithmetic is scaled by
+&x[1] - p == 1 // but this is in units of integers! Numerically, it is 4.
+p+((p+1)-p) == p+1 => This arithmetic scaling is consistent across all operations
+
+THINGS YOU CAN'T DO
+basically anything that isn't in the four fundamental pointer ops!
+p + q; (you can't add two pointers together)
+
+
+*** Exam question: *** *********************************************
+here's an expression: what is its type?
+
+int x; int* p; char s[] = {'h', 'e'... 'r', 'l', 'd', '\0'};
+p = &s[0];
+*p = 42; // Changes the first four characters of the string b/c the compilier thinks it's storing an integer
+         // overwrites four chars.
+
+expression          type
+------------------------
+x                   int
+42                  int
+s[0]                char
+&x                  int*
+p                   int*
+*p                  int
+&p                  int**
+s                   char*
+p+1                 int * (even if you make it start pointing to a char, it's still declared as an int*!)
+
+Note on String Literals
+-----------------------
+You can declare a char s[] array as a string
+char s[]= "Hello World";
+int32_t* p = (int32_t*) &s[0];
+printf("your string is %s\n", p);
+// Note that typecasts don't really do anything-- ignore them for the purposes of this class. It simply allows us to bypass type checking on the c++ compiler
+In C++, it's ILLEGAL to assign an address to a pointer unless the type assigned to that address is the same as the declaration of the pointer
+
+Little endian vs. Big endian normally doesn't matter, but when you're messing with pointer types you might run into it.
+intel -> little endian
+
+In the context of char s[] = "Hello world", "hello world" is just a shorthand for a char array declaration and NOT a string literal.
+In contrast, char* s1 = "your string is %s\n" IS a string literal!
+s1 = s1 + 2;
+
+String literals are turned into arrays by the compiler, and then the variable name s1 is set to the address of the first character in the array.
+
+'\n' = 10 = linefeed
+
+printf(&"Yo hey\n"[1]); // prints out "o hey". You start with a string literal, promoted to an array, then get the address of the array and move one up 
+
+Thursday:
+    MUST master basic pointer operations
+
