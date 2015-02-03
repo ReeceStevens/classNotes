@@ -1,0 +1,67 @@
+Printf() Case Study
+	Writing printf() using putchar(char c);
+	When declaring a C funtion in C++:
+	// Function prototyping
+	extern "C" {
+		void putchar(char c);
+	}	
+	
+	void displayDecimal(int x){
+		if (x == 0){ // Special case for zero
+			putchar('0');
+			return;	
+		}		
+		
+		if (x < 0) { // special case for negative numbers
+			putchar('-');
+			x = -x;
+			// Fall through and display absolute value of original
+		}
+
+		char digits[10];
+		int num_digits = 0;
+		while(x != 0){
+			char digit = x % 10 + '0'; // Add the offset to reach ASCII numbers
+			x = x / 10;
+			digits[num_digits] = digit;
+			num_digits++;
+		}
+		while (num_digits) {
+			num_digits -= 1;
+			putchar(digits[num_digits]);
+		}
+		return;
+	}
+
+	// All the ... syntax does is tells the compiler the fcn can be passed any number of params
+	void MyPrintf(char fmt[], ...){ // Could say either char fmt[] or char* fmt-- purely a style choice
+		int k = 0;
+        void* next_arg = &fmt + 1;
+		while(fmt[k] != 0){
+			if (fmt[k] == '%') { // escape sequence
+				// Determine type of the next arg we have
+				if (fmt[k+1] == 'd'){ // display in decimal
+					int* p = (int*) &fmt;
+					p = p + 1;
+					int x = *p;	
+					displayDecimal(x);
+				} else if (fmt[k+1] == 'c') { // display ASCII
+					int* p = (int*) &fmt;
+					p = p + 1;
+					int x = *p;	
+					putchar(x);
+				} else if (fmt[k+1] == '%') { // display a % character
+				} else { // whatttttt		
+				}
+				k = k + 2;
+			} else {
+				putchar(fmt[k]);
+				k = k + 1;	
+			}
+		}
+	}
+
+	int main(void) {
+		MyPrintf("Hello World\n");
+		MyPrintf("x is %d\n", 42);
+	}
