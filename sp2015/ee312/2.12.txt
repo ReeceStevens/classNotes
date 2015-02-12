@@ -1,0 +1,12 @@
+EE 312 Lecture
+2.12.15
+==============
+
+Memory Management (continued)
+	Using metadata structure of Knuth
+	We need to understand the structure well enough to reproduce it (even broken calls)
+	We'll be writing malloc and free
+
+	Purpose of .h files: DECLARE and share functions with other files
+
+Check out the malloc and free implementations in Project3/4.
