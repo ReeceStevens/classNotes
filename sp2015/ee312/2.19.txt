@@ -1,0 +1,66 @@
+EE 312 Lecture
+2.19.15
+==============
+Things we care about with programs:
+	1. Correctness/security <-- most important in this class
+	2. Efficiency <-- not usually important, but with some important exceptions
+	3. Maintainable <-- most important in real world; no perfect programs. 
+	4. Understandable (aka Pretty) <-- prettiness makes it maintainable
+
+Structs
+	Structs are user-defined types.
+	They aren't critical-- for example, FORTRAN didn't contain structs for a long time
+	Structs are all about making programs pretty
+	
+	example: complex numbers
+	struct complex {
+		double real;
+		double imag;
+	};
+	Complex power;
+	Complex current;
+
+Approximate the String data type that we'll be using in Project 4
+	We'll be making a struct to store the string, length
+	Note that HE ISN'T NULL TERMINATING THE STRING since we've already got the length
+		---> DON'T USE PRINTF()
+	
+	// Typedef  creates an alias for an existing type
+	// Here, we're defining the type in the command	
+	typedef struct String {
+		char* ptr;
+		uint32_t length;
+	} String; 
+
+	Usually in memory allocation, the compiler will round up per 4 bytes for struct size.
+	
+	String s;
+	s.ptr = "Craig";
+	s.length = 5;
+	
+	*** Pointers to structs ***
+	// &s is a String* type
+	String* p = &s;
+	// p contains the address of the beginning of the variable-- refers to the ENTIRE TYPE
+	(*p).length = 3;
+	
+	The parenthesis is required to be explicit, since the . operator is first in order of operations
+		In the end, the syntax for arrows replaces (*p).length with p->length		
+
+	There's no harm in making extra variables vs. having longer, more complex expressions. Either way, 
+		in practice the compiler perfors the same tasks and uses the same number of registers
+
+*** In project four, DON'T ACCESS ANYTHING IN THE STRUCT. Only use accessing functions. No way to get 5 pts if you access the struct ***	
+
+In Project 4:
+	Check for memory errors. Remember the types we talked about in last class.
+	Start with memory leaks-- they aren't fatal to the program. You can patch them after the program starts working.
+
+	Creating new strings:
+		StringCreate()
+		ReadString()
+		StringDup()
+	
+		All of these commands MUST be followed by a StringDestroy(). Make it a design choice to never make shallow copies.
+
+
