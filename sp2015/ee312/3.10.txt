@@ -1,0 +1,102 @@
+EE 312 Lecture
+3.10.15
+==============
+Project 6 Due Monday, Mar. 30 (One week after we get back from spring break)
+
+Next topic: Thinking recursively
+
+Functions with Struct Parameters
+--------------------------------
+int main(){
+    Set s;
+    s = createEmptySet();
+    insertSet(&s, 42);
+}
+
+One loop to copy everything that's smaller, insert desired value, one to copy everything greater
+
+// Generalized insertSet()
+
+Note that if you pass a struct as a parameter, you're making a copy of it. 
+i.e. your interface is completely broken if you change it.
+solution: always pass the address of the struct so you can change the original.
+insertSet(set* self, int x){
+    if (...) {return;}
+    int* p = malloc(...);
+    for (...) {...}
+    p[k] = x;
+    for (...) {...}
+    free(self->elements);
+    self->elements = p;
+    self->len += 1;
+}
+
+Convention in C when writing functions with structs as inputs is that
+you ALWAYS pass them as pointers.
+
+doit(Foo* p)
+1. Everyone does it
+2. It's faster to push an address
+3. Sometimes you need it (changing the input struct)
+
+Side note: malloc() and free() and printf() can be considered O(1), realloc() is O(N)
+
+Note: union function is the merge() function (look in the repo for the sorting example)
+
+Binary Search (how you trim down algorithm complexity in project 5)
+-------------
+Linear search: look at every element. If you know nothing about the array, you have to use linear search
+Binary search: you must know that the set is sorted. Divide in half repeatedly.
+Code is in the examples repository
+
+// Note that the search base is [lo,hi)
+// Specifically inclusive low, exclusive high
+// O(log(n))
+bool binarySearch(int x[], uint n, int v){
+    uint lo = 0;
+    uint hi = n; 
+    // True if v is an element in x[lo,hi), or else v isn't in x
+    while(lo < hi - 1){
+        uint m = (lo+hi)/2;
+        if (v < x[m]) { hi = m;}
+        else {lo = m;}
+    }
+    // Exiting the while loop, we know hi = lo + 1 and therefore,
+    // according to our invariant, v must be lo or not be in the set.
+    return v == x[lo];
+}
+
+It is not an optimization to add a catch statement to cut the loop off early if v is lo,
+since the probability of finding v is so incredibly low that the conditional statement
+slows you down more than the optimization speeds you up.
+
+Recursion-- a stupid example
+void doit(void){
+    doit();
+}
+
+Another stupid example
+int factorial(int n){
+    if(n<2){return 1;}
+    int t = factorial(n-1); // return value points to the equals sign (STR instruction-- specifically, STR R0 --> t)
+    return n*t;
+}
+
+// Step 1: think of a base case
+// Step 2: think of a slightly smaller case with a useful return value
+// Step 3: re-check your base case
+// Step 4: return
+
+... for this case, you could just write a for loop. Don't make things more complicated than they have to be
+Also, a loop is faster since you don't have to deal with all the stack manipulation and pushing/popping
+Only redeeming quality is that it has same O(N) value
+
+Only choose recursion if the solution is too complex to solve with a loop
+
+int fib(int n){
+    if (n < 2) { return 1; }
+    int t1 = fib(n-1);
+    int t2 = fib(n-2);
+    return t1 + t2
+}
+Also could easily build this in a loop.
