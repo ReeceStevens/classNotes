@@ -1,0 +1,84 @@
+EE 312 Lecture
+2.17.15
+==============
+Exam 1 coming up-- Will contain material on project 5
+Project 4-- we're making an entire application, debugging is supposed to be brutal
+	DUE FEB 25th (Wednesday), a week before the exam
+	Project 5 will be released then
+
+Review malloc() and free()
+malloc() - 
+	0. Change units
+	1. Start at zero
+		- negative or too small, go to next block
+		- "first fit" strategy
+	2. Split if block is too big
+		- return void* pointer, since we don't know anything about the data
+
+free() - 
+	1. Find meta data
+	2. Mark available
+	3. Combine with your successor if available
+	4. Combine with your predecessor if available
+		- hey, now that extra metadata at the top of the block is useful!
+	
+There was a little bug in our malloc() implementation earlier-- we didn't initialize the heap metadata.
+	If you don't initialize a global variable, C makes it zero
+	Local variables are random
+	DON'T EVER TAKE ADVANTAGE OF THIS TRIVIA-- always initialize your variables.
+
+// When do we want to run this function? Only the first time we call malloc()!
+void initHeap(void) {
+	the_heap[0] = HEAP_SIZE - 2;
+	the_heap[HEAP_SIZE-1] - HEAP_SIZE - 2;
+}
+
+// Make the initialized flag a global variable, initialize it to zero.
+int malloc(uint32_t size_in_bytes) {
+	if(!initialized) {
+		initHeap();
+		initialized = 1;
+	}
+	... other malloc stuff blah blah blah ...
+}
+
+MALLOC USER ERRORS
+1. Buffer Overflow
+	Remember... if malloc() fails, we return a null pointer.
+		// BUG: remember you request size in BYTES
+		int* p = malloc(10);
+		for (int k = 0; k<10; k+=1){
+			p[k] = k;
+		} // BUFFER OVERFLOW
+
+	If the metadata is corrupted, malloc() will start to do some really painful stuff.
+2. Use-After-Free Bug (unique to heap)
+	int* p = malloc(4);
+	*p = 42;
+	free(p);
+	int* q = malloc(4);
+	strcpy(q, "Sue");
+	*p = 42; // Sue turns into a star (*) :(
+	// Use after free bug, aka a dangling pointer
+	// Brutal bug to find, can often be split between people, files, programs, etc.
+
+3. Double Delete (unique to heap)
+	int* p  = malloc(4);
+	free(p);
+	int* q = malloc(4);
+	strcpy(q, "Sue");
+	free(p); // Doofus coder freed the block again! Double Delete.
+	int* r = malloc(1);	// This reasonable request now overwrites Sue.
+
+4. Memory Leak
+	int x = 0;
+	while(x<2){
+		int* p = malloc(1); // At second iteration, the first block is no longer pointed to but still is not deallocated!
+		x += 1;
+	}
+	// Simple Rule: before the program ends, you must deallocate EVERY block you create with malloc().
+	// ... that said, this rule isn't practical. The OS trashes the program's heap after it exits. Don't
+	// do this after this class!
+
+Good strategy for fixing bugs-- remove all calls to free! Turns all the use-after-free bugs into memory leaks, then you can
+progressively add calls to free to fix the leaks.

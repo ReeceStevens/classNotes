@@ -1,0 +1,93 @@
+EE 312 Lecture
+2.26.15
+==============
+
+Exam 1 Info
+	Wednesday March 4
+	CPE 2.218
+	Exercise 5 is a study guide for the exam
+	Fall 2014 released exam and Beta exam
+	
+	You need to know sorting algorithms by the second exam, not the first
+	Big-O, however, IS on the first test.
+
+	Swap is on the exam, know how to find errors in its implementation
+
+Bubble sort algorithm
+	compare two adjacent elements and swap if they're in the wrong order
+	continue until you don't have to swap any elements any more.
+
+	Not really efficient... redeeming quality is that it is simple to implement
+
+	void bubbleSort(int x [], uint32_t n) {
+		for (uint32_t k = 0; k < n-1; k += 1) {
+			for (uint32_t j = 1; j < n; j += 1) {
+				if (x[j] < x[j-1]){
+					swap(x[j], x[j-1]);
+				}
+			}
+		}
+	}
+
+	Time jump from 12 to 45 seconds (approximately 4 times longer for double the length)
+	i.e., O(n^2)
+
+Other example: Merge sort
+	recursion!
+	Helpful in project 5
+	Divide set into two halves, call your function again to sort each of those halves
+
+	use merge function in Project 5 for time optimization
+	Time complexity is O(nlog(n))
+
+Goto sorting algorithms
+	Heap sort  - if you can't use recursion
+	quick sort - if you have a cache
+
+******** Backing up in topic scope ************
+In many program applications, efficiency doesn't really matter
+	Microsoft Word or other applications (so fast we don't care)
+	Other programs that simply can't complete in time (so slow we don't care)
+
+	We're focused on what happens when the problem gets big.
+	
+	Plotting: 
+		Bubble sort - quadratic for t vs. n
+		Merge sort - nlog(n) vs. t
+			interesting note: for small problems, the "dumb" algorithms actually work better
+		
+	t(n) = O(f(n)) 
+	***** iff there exists two constants C and N, such that t(n) <= C*f(n) for all n > N *****
+		e.g. f(n) = n^2
+		Merge sort is O(nlogn)
+	
+	note:  for a constant, 
+		f(n) + a = O(f(n))
+		a*f(n) = O(f(n))
+		n^2 + n = O(n^2) // drop all lower ordered terms
+		log_2_n = O(logn) // The base of the log is a constant scaling factor (i.e. we can drop it)
+		For proofs, simply plug into our applied math expression
+
+		log_2_n = log_10_n * log_2_10; note that log_2_10 is a constant
+			never write the base of the log in a big-O statement
+		If a step takes a fixed amount of time no matter what the array size, we use the constant 1 (O(1))
+			
+		
+	This test will check our understanding of the fundamental mechanics of big-O
+
+		1. Straight line code is ALWAYS O(1)
+		2. if -- in essence, O(1); they usually don't matter
+			imagine the worst case where the longest step is always taken	
+		3. Loops
+			- time comparison complexity is # iterations of all loops in the nest	
+			example:
+			for (k=0;k<n;k++){
+				something
+			} // n iterations, O(n)
+			for (k=0;k<n;k++){
+				for (j=1, j < n; j=j*2){
+					something
+				}
+			} // n * log(n); you're repeating log(n) n number of times
+			// O(nlogn)
+
