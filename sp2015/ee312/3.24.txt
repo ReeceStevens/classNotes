@@ -17,3 +17,137 @@ How to Recursion!
 		 the original problem)
 	3. Validate your base cases
 	4. Verify by executing a small problem 
+
+In recursion, time doesn't exist.
+Exhaustive search is best implemented in recursion
+
+The rest of this class is focused on style and organization. We've basically covered all the basics.
+
+DATA STRUCTURES!!!
+
+Vectors (nothing to do with math) (in Java, called array-list)
+	What's wrong with current arrays?
+		1. Buffer overflow
+		2. Size
+		3. Not expandable
+			In C++:
+				push_back (append)
+				pop_back (remove)
+	Structure
+		- pointer to actual array (on heap)
+		- length
+		- capacity
+
+****************************** Vector.h
+#ifndef _Vector_h
+#define _Vector_h 1
+
+typedef struct Vector {
+	uint32_t length; // number of elements stored in the vector
+	uint32_t capacity; // size of the array (amount of available storage)
+	int32_t* data; // pointer to the array on the heap (never null)
+} Vector;
+
+// Initialize and return a vector for the client.
+// The vecor will contain sz elements all initialized to zero
+Vector createVector(uint32_t sz);
+
+// Clean up the vector (deallocate array on heap)
+void destroyVector(Vector v);
+
+// return value of kth element (zero based) of the array
+int32_t get(Vector v, uint32_t k);
+
+// Change the value of the kth element of v to be x
+void set(Vector v, uint32_t k, int32_t x);
+
+// Append the value x to the end of the vector v
+void push_back(Vector v, int32_t x);
+
+
+#endif
+
+****************************** Vector.cpp
+/* THIS PROGRAM AIN'T RIGHT we didn't pass the Vector struct as a pointer */
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "Vector.h"
+
+Vector createVector(uint32_t size) {
+	Vector result;
+	result.length = sz;
+	result.capacity = sz;
+	result.data = (int32_t*) malloc(sz * sizeof(uint32_t));
+	
+	for (uint32_t k = 0; k < sz; k += 1) {
+		result.data[k] = 0;
+	}
+
+	return result;
+}
+
+#define size(v) ((v).length)
+
+void destroyVector(Vector v){
+	free(v.data);
+	v.capacity = 0;
+	v. length = 0;
+}
+
+// super dang inefficient (use macro)
+int32_t get(Vector v, uint32_t k) {
+	assert(k < v.length); // if not in debug mode, compiler ignores these
+	return v.data[k];
+}
+
+// super dang inefficient (use macro)
+void set(Vector v, uint32_t k, int32_t x) { 
+	assert(k < v.length);
+	v.data[k] = x; 
+}
+
+void push_back(Vector* v, int32_t x) {
+	if (v->length == v->capacity){
+	int32_t* old_data = v->data;
+	v->capacity *= 2; // Reduces the time complexity from quadratic to LINEAR!!!
+	int32_t* new_data = (int32_t*) malloc((v->length + 1)*sizeof(int32_t));
+	for (uint32_t k = 0; k < v->length; k += 1){
+		new_data[k] = old_data[k];
+	}
+	free(old_data);
+	v->data = new_data;
+	}
+	v->data[v->length] = x;
+	v->length += 1;
+}
+
+****************************** Client side file
+#include <stdio.h>
+#include <stdlib.h>
+#include "Vector.h"
+
+void printVector(Vector x){
+	const char* prefix = "";
+	for (uint32_t k = 0; k < size(x); k += 1){
+		printf("%s%d", prefix, get(x,k));
+		prefix = ", ";
+	}
+	printf("\n"):
+}
+
+// Client side
+int main(void){
+	Vector v;
+	
+	v = createVector(10);
+	for (uint32_t k = 0; k < 10;, k += 1){
+		set(v,k, k+1);	// v[k] = k + 1
+	}
+	set(v,6,42);
+	push_back(v, 11);
+
+	printVector(v);	
+}
