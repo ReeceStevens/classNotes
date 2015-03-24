@@ -1,0 +1,19 @@
+EE 312 Lecture
+3.24.15
+==============
+Overview of where we'll find recursion in this class:
+	Project 6 (due Monday)
+	Exam 2
+	Project 9 and 10
+
+How to Recursion!
+	** remove "and then" from your vocabulary **
+	0. Make concrete problems
+	1. Find any base case
+	2. find smaller problems
+		Imagine the solution (you have a magic oracle)
+		Select the problem
+		(smaller problem, the solution to which is helpful to solve
+		 the original problem)
+	3. Validate your base cases
+	4. Verify by executing a small problem 
