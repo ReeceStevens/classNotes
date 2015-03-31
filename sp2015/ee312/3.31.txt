@@ -94,4 +94,4 @@ Equivalent in C macro:
         Can't account for this with the C macro, but can with C++ function overloading.
 
 New String abstract data type for Project 7
-    
+    Check the .h file   
