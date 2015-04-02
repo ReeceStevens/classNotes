@@ -81,10 +81,24 @@ public:
 		ptr = p;
 	}
 	
-	String operator+(const STring& that) const {
+	String operator+(const String& that) const {
 		String result = *this;
 		result += that;
 		return result;	
+	}
+
+	String(String& that) { copy(that); }; // copy constructor (construtor that has parameter of the same type)
+
+private:
+	// initialize this so it becomes a real copy of that
+	void copy(const String& that) {
+		len = that.len;
+		ptr = new char[len + 1];
+		for (uint32_t k = 0; k < len; k += 1) {
+			ptr[k] = that.ptr[k];
+		}
+		ptr[len] = 0;
+	}	
 };
 
 #endif 
@@ -98,6 +112,16 @@ public:
 void doit(String s) {
 	printf("s is %s\n", s.c_str());
 } // This is a NASTY subtle double delete bug!
+/* When you pass s as a parameter, it is pushed on the stack for the local function.
+When the function falls out of scope, C++ compiler calls the destructor! Since
+the copy in the stack frame is a shallow copy, both copies of s are pointing to the
+same allocated space on the heap. Once the main function exits, the destructor is called
+again on the same location in memory ==> double delete. */
+
+// Correct way:
+void doit(String& s) {
+	printf("s is %s\n", s.c_str());
+} 
 
 int main(void) {
 	String s = "Bottles";
