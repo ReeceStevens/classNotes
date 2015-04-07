@@ -16,6 +16,11 @@ an assignment operator, destroy function, and copy function.
 The destructor's purpose is to clean up any resources owned by the
 object, but outside of it. It is NOT to clean up the object itself!
 
+When a struct contains another struct, we don't have to worry about if it contains a pointer.
+The destructor for the struct is already run by the compiler at cleanup time.
+Same thing with assignment-- compiler uses the default copy function for each data type, so
+it automagically uses the copy constructor for the struct. Not our problem.
+
 Vector struct continued
 -----------------------
 In C++, 
@@ -164,3 +169,17 @@ problem: it deletes itself before it copies itself.
 deleting a bug from the list:
 bug_list[k] = bug_list[n-1];
 destroy(bug_list[n-1]);
+
+
+NEW TOPIC!
+Binary Search Trees
+-------------------
+Fundamental operations for a data structure
+                Vector          Sorted Vector   Binary Search Tree
+    1. find     O(N)            O(logN)         O(logN)
+    2. insert   O(1)*           O(N)            O(logN) 
+    3. remove   O(1)            O(N)            O(logN)
+    4. scan     O(N)            O(N)            O(N)
+
+
+
