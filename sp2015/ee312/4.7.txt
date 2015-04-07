@@ -1,0 +1,166 @@
+EE 312 Lecture
+4.7.15
+==============
+Project 8 -- random selection simulation
+    (note: uses fltk graphics, need to get the Linux binding for the engine)
+    Rolling dice: rand() % GENE_TOTAL;
+
+    deleting a bug from the list:
+    bug_list[k] = bug_list[n-1];
+    destroy(bug_list[n-1]);
+
+
+If you have a pointer in your struct, you almost always need
+an assignment operator, destroy function, and copy function.
+
+The destructor's purpose is to clean up any resources owned by the
+object, but outside of it. It is NOT to clean up the object itself!
+
+Vector struct continued
+-----------------------
+In C++, 
+    vector<Bug> bug_list;
+In project 7, we essentially implemented vector<Customer>.
+
+Bug b;
+b = bug_list[k];
+// This works! You can make a true copy using the = operator
+Bug c = b;
+c.genes[4] += 1;
+c.genes[2] -= 1; // these should be random and check the decremented gene won't be negative
+b.health /= 2;
+c.health /= 2;
+// not an exhaustive list of stuff you need to do
+bug_list.push_back(c);
+// install fltk (already done on arch)
+
+Back to String example
+----------------------
+
+----- Client Code -----
+#include <stdio.h>
+#include <stdint.h>
+
+#include "String.h"
+
+void doit(String s) {
+	printf("s is %s\n", s.c_str());
+}
+
+int main(void) {
+	String s = "Bottles";
+	s += " are in stock";
+	String t = "sale today";
+
+	doit(s);	
+
+    String t("Hello");
+
+    // Default behavior: shallow copy AND a memory leak. Not good.
+     
+    s = t; 
+
+	printf("The string is %s %s \n", t.c_str(), s.c_str());
+}
+
+--- String.h ---
+#ifndef _String_h
+#define _String_h
+#include <stdlib.h>
+#include <stdint.h>
+
+struct String {
+private:
+	char* ptr;
+	uint32_t len;
+public:
+	String(const char* src){
+		len = 0;
+		while (src[len] != 0) {
+			len += 1;
+		}
+		ptr = new char[len + 1];
+		for (uint32_t k = 0; k < len; k += 1){
+			ptr[k] = src[k];
+		}	
+		ptr[len] = 0; // null terminator
+	}
+
+	String(void){  // The default constructor
+		len = 0;
+		ptr = new char[1];
+		*ptr = 0;
+	};
+
+	~String(void) {
+		destroy();			
+	}
+
+	uint32_t size(void) const { return len; } // This placement of const declares the implicit "that" parameter constant
+
+	void print(void) const {
+		printf(%s", ptr);
+	}
+
+	const char* c_str(void) const {return ptr;} // IN PROJECT 7!!!
+
+	// Change this into this + that
+	void operator+=(const String& that) { // If you don't need to modify the object, make it const
+		char* p = new char[this->len + that.len];	
+		for (uint32_t k = 0; k < len; k += 1) {
+			p[k] = ptr[k];
+		}
+	
+		for (uint32_t k = 0; k < len; k += 1){
+			p[k + len] = that.ptr[k];
+		}
+
+		len = len + that.len;
+		p[len] = 0;
+		delete [] ptr;
+		ptr = p;
+	}
+
+    String& operator=(const String& that) {
+        if (this != &that){
+            destroy();
+            copy(that);
+        }
+        return *this;
+    }
+	
+	String operator+(const String& that) const {
+		String result = *this;
+		result += that;
+		return result;	
+	}
+
+	String(const String& that) { copy(that); }; // copy constructor (construtor that has parameter of the same type)
+
+private:
+	// initialize this so it becomes a real copy of that
+	void copy(const String& that) {
+		len = that.len;
+		ptr = new char[len + 1];
+		for (uint32_t k = 0; k < len; k += 1) {
+			ptr[k] = that.ptr[k];
+		}
+		ptr[len] = 0;
+	}	
+    void destroy(void){
+        delete [] ptr;
+    }
+};
+#endif
+
+a = b = c
+a = (b = c) // evaluated from right to left!
+Unfortunately, if we try to return void with operator=, compiler will yell.
+Must return type string.
+
+Other assignment case: s = s.
+problem: it deletes itself before it copies itself.
+
+deleting a bug from the list:
+bug_list[k] = bug_list[n-1];
+destroy(bug_list[n-1]);
