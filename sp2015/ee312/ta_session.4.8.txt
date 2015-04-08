@@ -1,0 +1,9 @@
+References are a "reference to something else"
+when you change a reference, you change whatever it is you're referring to
+
+Mechanically, when you pass a parameter to a function accepting a reference, you're actually passing 
+the address of your parameter. Then, inside the function, any time you reference the variable name 
+the compiler automatically dereferences the address for you.
+
+Problems arise when you start flinging references around without checking to make sure
+immediate dereferencing won't break your code.
