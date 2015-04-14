@@ -86,4 +86,44 @@ Node* removeTree(Node* root, int32_t v) {
     }
 
     return root;
-} 
+}
+
+********* Big Oh Analysis
+What's the longest path? Called the "height of a tree." (h).
+    Definition: number of nodes along the longest path from the root to any leaf.
+
+Find - O(h)
+insert - O(h)
+remove - O(h)
+
+We need to re-express h as a function of n, the number of inputs.
+    We know: h <= n. Absolute worst case: everything's O(n).
+    Really:
+        log_2(n+1) <= h <= n.
+    =>  O(logn) <= O(h) <= O(n).
+    For all true trees, you're always at O(logn) (i.e. for red-black trees)
+    For OUR trees, h = O(n). But this almost never happens! Like, crazy unlikely.
+        If you sort an array and insert each value into a tree, of course it's gonna be a crappy tree!!!
+    Balanced tree means that the tree is O(logn)
+
+    Final answer: For balanced tree, O(log(n))
+            unsorted    sorted   (balanced)     (Pathological worst case suck-y)
+            vector      vector      BST             BST
+    -----------------------------------------------------------------------------
+    find    O(N)        O(logn)     O(logN)     O(N)
+    insert  O(1)        O(N)        O(logN)     O(N)
+    remove  O(1)        O(N)        O(logN)     O(N)
+    scan    O(N)        O(N)        O(N)        O(N)
+
+Scan in a BST: call smallest, then repeatedly call successor N times.
+
+As long as you only use a pointer once and never double back (one pointer to child, one to parent) you
+only perform 2N 
+    O(h) - find the smallest.
++   (n-1)O(h)
+---------------------------
+NOT o(n^2)
+
+Average cost for successor is O(1). Worst case, O(h).
+Each time we cross a pointer off in scan represents a successor call. This means
+scan is O(N)!
