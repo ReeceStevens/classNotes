@@ -123,8 +123,15 @@ Node* recursiveCopy(Node* root) {
 	return p;
 }
 
+// We're changing the node typedef into a private variable!
 stuct BST{
 private:
+	struct Node {
+		int32_t value;
+		Node* left;
+		Node* right;
+		Node* parent;
+	}
 	Node* root;
 	uint32_t length;
 public:
@@ -162,17 +169,141 @@ public:
 		}
 		return *this;
 	}
+	
+	void print(void) {
+		(see example folder for the code here, sorry!)	
+	}
+	// we have to move all the functions using Node into the struct.
+Node* insertTree(NodePtr& root, int32_t value) {
+// Root is a reference to someone else's variable, named root. i.e., root is a pre-existing variable.
+// Without the (&), it's a new variable named root that's only in this stack frame!
+// At the C level, you'd make the client pass the address of their pointer so you can change the location it points to.`
+    // Step one: make a new leaf
+    Node* child = new Node;
+    child->value = value;
+    child->left = 0;
+    child->right = 0;
+
+    // special case of an empty tree
+    if (!root) {
+        root = child; 
+        return root;
+    }
+
+    // Step two: find the parent for this new leaf 
+    Node* parent = nullptr; // keyword that indicates zero, but can't be confused for a number
+    Node* p = root;
+    while(p){
+        parent = p;
+        if (value < parent->value){
+            p = parent->left;
+        } else {
+            p = parent->right;
+        }
+    }
+
+    // Step three: insert the leaf as a child of parent
+    if (value < parent->value) {
+        parent->left = child;
+    } else {
+        parent->right = child;
+    }
+    child->parent = parent;
+    return root;
 }
 
+int removeTree(NodePtr& root, int32_t v) {
+    // Step 1: find the node containing that value.
+    Node* p = root;
+    while(p && p->value != v) { // Check for null ptr, value doesn't exist in tree. Also handles null tree case.
+        if (v<p->value) {
+            p = p->left;
+        } else {    
+            p = p->right;
+        }
+    }
+    if (!p) { return false; } // Value doesn't exist in our tree. Get out!
+
+    // Step 2: Decide which case applies.
+    if (p->right == nullptr) { // easy, no right subtree
+        Node* parent = p->parent; // Just for making the code easier to write
+        
+        Node* child = p->left;
+        if (parent == nullptr){ // Detect the special case.
+            root = child;
+            if (child) {child->parent = nullptr; }
+            child->parent = nullptr;
+            return true;      
+        }
+        if (p == parent->left) {
+            parent->left = child;
+        } else {
+            parent->right = child; 
+        }
+        if (child) { child->parent = parent; }
+    } else { // Hard case, right subtree exists
+        Node* s = successor(p); // since there's a right subtree, there has to be a successor. 
+        // Successor is the SMALLEST VALUE IN THE RIGHT SUBTREE. Therefore it has no left child.
+        // Steal value from the successor and remove the successor.
+        p->value = s->value;
+        Node* parent = s->parent;
+        Node* child = s->right;
+        if (s == parent->left) {
+            parent->left = child;
+        } else {
+            parent->right = child; 
+        }
+        if (child) { child->parent = parent; } // protect in case s->right is null.
+        delete s;
+    }
+
+    return true;
+}
+
+// Time complexity: Linear!
+void recursiveDelete(Node* root){
+	if (!root) {
+		return;
+	}
+	recursiveDelete(root->left);
+	recursiveDelete(root->right);
+	delete root;
+}
+
+Node* recursiveCopy(Node* root) {
+	if (!root) {
+		return nullptr;
+	}
+	Node* p = new Node;
+	p->value = root->value;
+	p->parent = nullptr;
+
+	Node* t1 = recursiveCopy(root->left);
+	Node* t2 = recursiveCopy(root->right);
+
+	p->left = t1;
+	if (t1) { t1->parent = p; }
+	p->right = t2;
+	if (t2) { t2->parent = p; }
+	return p;
+}
+}
+
+void doit(BST x) {
+	x.insert(42);
+	x.print();
+}
+
+// Goal for today: make Node a private type so that it's internal to our design
 int main(void) {
     Node* my_tree = nullptr; // empty tree
 	BST my_tree;
 	my_tree.insert(10);
-    insertTree(my_tree, 10);
-    insertTree(my_tree, 5);
-    insertTree(my_tree, 20);
-    insertTree(my_tree, 8);
-    insertTree(my_tree, 15);
-    insertTree(my_tree, 40);
-    printTree(my_tree);
+    my_tree.insert(10);
+    my_tree.insert(5);
+    my_tree.insert(20);
+    my_tree.insert(8);
+    my_tree.insert(15);
+    my_tree.insert(40);
+	my_tree.print();
 }
