@@ -174,7 +174,7 @@ public:
 		(see example folder for the code here, sorry!)	
 	}
 	// we have to move all the functions using Node into the struct.
-Node* insertTree(NodePtr& root, int32_t value) {
+static Node* insertTree(NodePtr& root, int32_t value) { // Static suppresses the implicit parameter "this"!
 // Root is a reference to someone else's variable, named root. i.e., root is a pre-existing variable.
 // Without the (&), it's a new variable named root that's only in this stack frame!
 // At the C level, you'd make the client pass the address of their pointer so you can change the location it points to.`
