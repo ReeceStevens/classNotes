@@ -1,0 +1,37 @@
+EE 312 Lecture
+4.21.15
+===============
+Test Review
+Recursion
+	4 short programs (4 pts each) 
+Data Structure and problem/algorithm analysis
+	Vector (sorted and unsorted)
+	BST (balanced and unbalanced) - he'll give us good reason to believe it's balanced or unbalanced
+		unbalanced = height of n. Basically just a doubly linked list
+	Sorting - O(nlogn) is the fastest
+		If you're stuck in a problem, sort data. Look for situations where sorting helps you.
+C++
+	1. Public/Private
+	2. member functions
+	3. Constructors (including copy constructors)
+	4. Destructors
+	5. Operator overloading
+	6. Function overloading
+	7. New/Delete
+		new = malloc plus running constructor and scaling size
+		delete = free plus running destructor
+			delete = p->~type && free(p) = outside resources and type
+	8. References
+		practice writing swap() in C and then C++
+
+Time complexity is a big deal on this test. Make sure you know it for our data structures
+
+Balancing a crappy BST (not on test but really intersting)
+==========================================================
+If you know in advance you have n nodes, allocate an array of n pointers to each
+node. This is a linear time process - scanning is linear and a vector uses amortized
+doubling (linear).
+Find the median... which is just vector position n / 2. Make this the root.
+Use recursion: give half the remaining array to one delegate and the other half to another (starting at median plus 1).
+Time complexity: O(N)
+
