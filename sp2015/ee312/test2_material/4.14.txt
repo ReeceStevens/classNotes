@@ -1,0 +1,129 @@
+EE 312 Lecture
+4.14.15
+==============
+Finishing up trees
+------------------
+Remember from last time that there is only
+one unique location where you can place a new number
+in a binary search tree!
+        10
+    5       20
+      7 <-- must go here!
+
+If numbering from 1 to num_elements, there
+is only one way that you can insert all the numbers in subsequent 
+order.
+        o
+    o       o
+  o o       o o
+To find the successor to a node:
+    1. It's the smallest node in the right subtree
+        - essentially, go right as many times as you possibly can.
+    2. If you don't have a right subtree, go up until you reach your
+        first right subtree.
+    You know you've hit the right value because the next value makes
+    you fall out of the tree!
+
+Now writing remove:
+    1. Leaf - easy. Go up to the parent and make the pointer to the leaf a null. (Actually don't need this case, 2 or 3 covers it)
+    2. Right is null - Go up to the parent and move the parent's pointer to the node's child.
+    3. Left is null - Go up to the parent and move the parent's pointer to the node's child. (Case 4 covers this case, but not case 1)
+    4. Neither is null - More complicated.
+        Don't actually remove the node, just replace the value!
+        Duplicates to the right are okay, so we can just copy the smallest value in the right subtree
+        Also can pick the largest value in the left subtree (but don't pick this option, since we defined
+            our tree to strictly smaller to the left).
+        Solution: Steal successor!
+            Critical Properties of BST (and reaching case 4)
+            1. Successor must exist and must be in right subtree.
+            2. Successor has NO LEFT SUBTREE. Can remove by case three.
+
+Code Implementation- only have to code case 2 and 4!
+
+Node* removeTree(Node* root, int32_t v) {
+    // Step 1: find the node containing that value.
+    Node* p = root;
+    while(p && p->value != v) { // Check for null ptr, value doesn't exist in tree. Also handles null tree case.
+        if (v<p->value) {
+            p = p->left;
+        } else {    
+            p = p->right;
+        }
+    }
+    if (!p) { return root; } // Value doesn't exist in our tree. Get out!
+
+    // Step 2: Decide which case applies.
+    if (p->right == nullptr) { // easy, no right subtree
+        Node* parent = p->parent; // Just for making the code easier to write
+        
+        Node* child = p->left;
+        if (parent == nullptr){ // Detect the special case.
+            root = child;
+            if (child) {child->parent = nullptr; }
+            child->parent = nullptr;
+            return root;      
+        }
+        if (p == parent->left) {
+            parent->left = child;
+        } else {
+            parent->right = child; 
+        }
+        if (child) { child->parent = parent; }
+    } else { // Hard case, right subtree exists
+        Node* s = successor(p); // since there's a right subtree, there has to be a successor. 
+        // Successor is the SMALLEST VALUE IN THE RIGHT SUBTREE. Therefore it has no left child.
+        // Steal value from the successor and remove the successor.
+        p->value = s->value;
+        Node* parent = s->parent;
+        Node* child = s->right;
+        if (s == parent->left) {
+            parent->left = child;
+        } else {
+            parent->right = child; 
+        }
+        if (child) { child->parent = parent; } // protect in case s->right is null.
+        delete s;
+    }
+
+    return root;
+}
+
+********* Big Oh Analysis
+What's the longest path? Called the "height of a tree." (h).
+    Definition: number of nodes along the longest path from the root to any leaf.
+
+Find - O(h)
+insert - O(h)
+remove - O(h)
+
+We need to re-express h as a function of n, the number of inputs.
+    We know: h <= n. Absolute worst case: everything's O(n).
+    Really:
+        log_2(n+1) <= h <= n.
+    =>  O(logn) <= O(h) <= O(n).
+    For all true trees, you're always at O(logn) (i.e. for red-black trees)
+    For OUR trees, h = O(n). But this almost never happens! Like, crazy unlikely.
+        If you sort an array and insert each value into a tree, of course it's gonna be a crappy tree!!!
+    Balanced tree means that the tree is O(logn)
+
+    Final answer: For balanced tree, O(log(n))
+            unsorted    sorted   (balanced)     (Pathological worst case suck-y)
+            vector      vector      BST             BST
+    -----------------------------------------------------------------------------
+    find    O(N)        O(logn)     O(logN)     O(N)
+    insert  O(1)        O(N)        O(logN)     O(N)
+    remove  O(1)        O(N)        O(logN)     O(N)
+    scan    O(N)        O(N)        O(N)        O(N)
+
+Scan in a BST: call smallest, then repeatedly call successor N times.
+
+As long as you only use a pointer once and never double back (one pointer to child, one to parent) you
+only perform 2N 
+    O(h) - find the smallest.
++   (n-1)O(h)
+---------------------------
+NOT o(n^2)
+
+Average cost for successor is O(1). Worst case, O(h).
+Each time we cross a pointer off in scan represents a successor call. This means
+scan is O(N)!

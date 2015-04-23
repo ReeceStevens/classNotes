@@ -1,0 +1,121 @@
+EE 312 Lecture
+4.23.15
+==============
+Hash Tables
+-----------
+In review:
+        Vector           BST     Hash Table
+find    O(N)/O(logN)    O(logN)   O(1)/O(N)
+insert  O(1)/O(N)       O(logN)   O(1)/O(1)
+remove  O(1)/O(N)       O(logN)   O(1)/O(N)
+
+Hash Tables - array based
+     a  b  c  d  e  f
+    |--|--|--|--|--|--|
+    |__|__|__|__|__|__| 
+           |         
+           |         
+           |
+        |----|-----|
+        |Carl|     |
+        |----|-----|
+                |
+            |-----|-----|
+            |Craig|     |
+            |-----|-----|
+Linked list coming off each key in the hash table
+
+Key -> array position
+This transformation must be done in constant time-- called "hashing" done by a "Hash Function"
+We want the hash function to distribute the keys thouroghly. Must be deterministic but still pseudo-random. ************
+Inspiration: tabs on a phonebook to jump to a certain letter
+find("Craig")
+
+Collision - two or more different keys that map to the same array position
+Chain - the sequence of keys at any one array position
+
+Hash function examples:
+
+/* NOTE THAT THESE ALL SUCK */
+// first character in string
+uint32_t hash(char* s) {
+    return *s;
+}
+// Always return array position 42
+// Terrible performance, but technically still legal.
+uint32_t hash(char* s){
+    return 42;
+}
+// Return a random number.
+// Flat-out invalid. ********** Keys must be deterministic. *********
+uint32_t hash(char* s){
+    return rand();
+}
+
+// Somewhat decent hash function: sum of all ascii characters.
+// problem: generates large numbers for the hash function. 
+// Need an extra step to put it in the range of the existing array.
+uint32_t hash(char* s){
+    uint32_t h = 0;
+    uint32_t k = 0;
+    while(s[k] != 0) {
+        h = h + s[k];
+        k = k+1;
+    }
+    return h;
+}
+// real problem: generates a collision for any anagrams, or letters that are array_size apart.
+
+**** TWO STEP PROCESS ****
+uint32_t hashcode = hash(key); // some number between 0 and 4 billion.
+uint32_t pos = hashcode % array_size; // transform it to our array range
+
+Sources of collisions:
+    1. Hash functions generate the same key
+    2. Array_size forced the hash function to map to the same position.
+
+// Remarkably good hash function in practice.
+uint32_t hash(char* s){
+    uint32_t h = 0;
+    uint32_t k = 0;
+    while(s[k] != 0) {
+        // we need to adjust by the position in the string to encourage more random distribution.
+        h = h*33 + s[k];
+        k = k+1;
+    }
+    return h;
+}
+
+Why 33? In binary this is 10001. This means you can leftshift by 5 and then add one (faster, computers didn't used to have multiplication capability)
+By multiplying, we're propogating information from the lower bits to the higher bits more quickly. Allows us to evenly distribute the data throughout 
+all 32 bits.
+
+Definition:
+    Load factor - mean chain length.
+        Load factor = # keys / array_size = length / capacity
+        Can the load factor be greater than 1?
+            yes - but the larger your load factor, the less efficient finding things in the hash table becomes.
+
+We have complete control over the load factor.
+Load Factor = O(1) ? 
+    => we're going to do amortized doubling to keep the load factor small. Once the load factor gets past the value you want, double the array size!
+    Reasonable values: 0.8, 0.75, etc.
+    When we inrease the array size, however, we're going to have to rehash the table! You don't have to redo the hash code, just redo the second step (%). Just save the hash value in the struct!
+        (likely that keys that have collided before will become distributed-- hooray!)
+
+For the sake of Big-Oh calculations, HASH FUNCTIONS SHOULD BE CONSIDERED CONSTANT TIME (IGNORE THE WHILE LOOP INSIDE IT)
+
+Going back to our table...
+
+m = max chain length
+Simple Uniform Hashing - an assumtion that your hash function doesn't suck. If we control our table, the load factor determines the chain length
+    formally: max chain length = O(Load factor) = O(1).
+          Uniform  Unknown 
+          Hashing  Hashing
+        --------------------
+find        O(1)    O(N)
+insert      O(1)*   O(1)*   <-- if you aren't worrying about duplicates, just pop new entries in the front of the chain. AMORTIZED CONSTANT
+remove      O(1)    O(N)    <-- you have to find something before you can remove it.
+scan        O(N)    O(N)
+
+

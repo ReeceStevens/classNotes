@@ -1,0 +1,128 @@
+EE 312 Lecture
+4.2.15
+==============
+
+Why c vs. c++?
+	1. smaller language (fewer design variants)
+	2. faster (?) arguable
+	3. Not a great c++ compiler 
+
+Function overloading
+	Rule: number or type of parameters must be different
+		  in order for the compiler to distinguish between
+		  functions with the same name.
+
+Scoping rules for C/C++
+	First, local variables
+	Go out one set of braces
+	Keep going out to parameters
+	Class Scope
+	Globals
+
+*** NOTE this means that if you define a local variable
+	with the same name as an object attribute, you have
+	to explicity say this->attribute ***
+
+--- String.h ---
+#ifndef _String_h
+#define _String_h
+#include <stdlib.h>
+#include <stdint.h>
+
+struct String {
+private:
+	char* ptr;
+	uint32_t len;
+public:
+	String(const char* src){
+		len = 0;
+		while (src[len] != 0) {
+			len += 1;
+		}
+		ptr = new char[len + 1];
+		for (uint32_t k = 0; k < len; k += 1){
+			ptr[k] = src[k];
+		}	
+		ptr[len] = 0; // null terminator
+	}
+
+	String(void){  // The default constructor
+		len = 0;
+		ptr = new char[1];
+		*ptr = 0;
+	};
+
+	~String(void) {
+		delete[] ptr;			
+	}
+
+	uint32_t size(void) const { return len; } // This placement of const declares the implicit "that" parameter constant
+
+	void print(void) const {
+		printf(%s", ptr);
+	}
+
+	const char* c_str(void) const {return ptr;} // IN PROJECT 7!!!
+
+	// Change this into this + that
+	void operator+=(const String& that) { // If you don't need to modify the object, make it const
+		char* p = new char[this->len + that.len];	
+		for (uint32_t k = 0; k < len; k += 1) {
+			p[k] = ptr[k];
+		}
+	
+		for (uint32_t k = 0; k < len; k += 1){
+			p[k + len] = that.ptr[k];
+		}
+
+		len = len + that.len;
+		p[len] = 0;
+		delete [] ptr;
+		ptr = p;
+	}
+	
+	String operator+(const String& that) const {
+		String result = *this;
+		result += that;
+		return result;	
+	}
+
+	String(String& that) { copy(that); }; // copy constructor (construtor that has parameter of the same type)
+
+private:
+	// initialize this so it becomes a real copy of that
+	void copy(const String& that) {
+		len = that.len;
+		ptr = new char[len + 1];
+		for (uint32_t k = 0; k < len; k += 1) {
+			ptr[k] = that.ptr[k];
+		}
+		ptr[len] = 0;
+	}	
+};
+
+#endif 
+
+----- Client Code -----
+#include <stdio.h>
+#include <stdint.h>
+
+#include "String.h"
+
+// NOW THIS WORKS ONCE WE DEFINE THE COPY CONSTRUCTOR
+void doit(String s) {
+	printf("s is %s\n", s.c_str());
+} // This is a NASTY subtle double delete bug!
+/* When you pass s as a parameter, it is pushed on the stack for the local function.
+When the function falls out of scope, C++ compiler calls the destructor! Since
+the copy in the stack frame is a shallow copy, both copies of s are pointing to the
+same allocated space on the heap. Once the main function exits, the destructor is called
+again on the same location in memory ==> double delete. */
+
+int main(void) {
+	String s = "Bottles";
+	s += " are in stock";
+	String t = "sale today";
+	doit(s);	
+	printf("The string is %s %s \n", t.c_str(), s.c_str());
+}
