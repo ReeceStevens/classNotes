@@ -1,0 +1,108 @@
+EE 312 Lecture
+4.30.15
+==============
+Parse Trees
+-----------
++ 2 2
+Take advantage of the implicit recursive definition of what an expression is
+
+expr is
+    number
+| variable name
+| + expr expr
+| ... blah blah all the operators
+
+tree is
+    nullptr
+|   node w/2 trees
+
++ 2 ~ - 10 5a
+
+        +
+    2       ~
+                -
+            10      5
+struct Expr {
+    int kind; // tell me what type the expression is  
+    int value; // if it's a number
+    String varname; // if it's a variable 
+    Expr* left;
+    Expr* right;
+}
+
+// What does enum do?
+//  typedef int
+
+// essentially adds labels. similar to doing #define for each number
+enum ExprKind {
+    NUM,
+    VAR
+    ADD,
+    SUB,
+    LT,
+    NEG,
+    ...
+}
+
+You need two functions:
+    1. Build parse tree and return pointer
+    2. Given a parse tree pointer, evaluate
+
+There are two different but connected trees in this project: expression (above) and statement (below)
+    statement is
+        comment
+    | text string
+    | output expr
+    | var string expr
+    | set string expr
+******** added in project 10 ********
+    | if expr [statements ...] [else [statements ...]] fi
+    | do expr {statements ...] od
+
+enum StatementKind {
+    COMMENT,
+    TEXT,
+    OUT,
+    VAR_STMT,
+    SET_STMT 
+}
+
+Struct statement {
+    StatementKind kind;
+    String txt;
+    Expr* expr;  
+    Vector<Statement*> ifbody;
+    Vector<Statement*> elsebody;
+}
+
+Statement Parse Tree
+        do
+       /  \
+     <     ___________
+    / \    |____|____|
+   x   10    |    |
+            out  set
+             |    / \
+            "x" "x"  +
+                    / \
+                  "x"  1
+
+Templates (not on test, but good to know)
+-----------------------------------------
+// Essentially nothing more than a glorified macro
+template<typename T>
+struct vector {
+    T* data; // We want to make this struct GENERIC with respect to the type of this variable!
+    uint32_t len;
+    uint32_t cap;
+    vector(uint32_t sz) {
+        data = new T[sz];
+        cap sz;
+        len sz;
+        for (...) {...}
+    }
+}
+// to fill in the placeholder,
+vector<Bug> bug_list;
+vector<statement*> body;
+

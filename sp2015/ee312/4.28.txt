@@ -1,0 +1,15 @@
+EE 312 Lecture
+4.28.15
+==============
+Going over questions in Test 2
+
+Project 9: due Wednesday (tomorrow)
+Project 10: due next Friday
+
+Parse trees (not much time to go over them)
+    Re-express a blip expression in a way that is convenient store in memory and easy to execute recursively.
+        +
+    +       +       =>      result: 14
+  2   4   3   5
+
+

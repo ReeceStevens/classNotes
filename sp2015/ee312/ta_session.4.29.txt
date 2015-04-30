@@ -1,0 +1,7 @@
+TA Session
+4.29.15
+==========
+Hash table review
+String -> Hash -> Index
+The index refers to a table of linked lists, storing each collision.
+The hash is a mathematical concept, but the index is the WAY we use this concept and translate it to a location. This is where the collisions occur.
