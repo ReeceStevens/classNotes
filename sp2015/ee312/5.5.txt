@@ -1,0 +1,67 @@
+EE 312 Lecture
+5.5.15
+==============
+Going back in time to project 7 (customer database)
+
+        Craig
+      /       \
+    Billy    Sue
+            /
+          Johnny
+
+Problem: full table scan. It's a linear time operation because we're looking 
+         for a value the tree isn't sorted by.
+
+We don't want the designer to even have to think about "Node" or "treecell" or whatever
+Don't mix the design concept with the implementation!!!
+find maxBottles() {
+    Node* p = smallest(database);
+    while(p) {
+        ...
+        p = successor(p);
+    }
+}
+Solution to this problem: iterator.
+Give your client two classes: data structure and scanner.
+void printTree(BST<int> myTree) {
+    const char* prefix = "";
+    BST<int>::Scanner p = myTree.startScan();
+    // C++ style iterator
+    while(p) {
+        printf("%s%d, prefix, *p);
+        prefix = ", ";
+        ++p;
+    }
+    printf("\n");
+    
+    // Java-style iterator
+    Scanner p = myTree.startScan();
+    while(p.hasNext()) {
+        Customer c = p->next();
+    }
+}
+
+Advantage of disassociating these two concepts: we allow our code to be usable and 
+scalable!
+
+**** STUDY SCANNING A HASH TABLE BEFORE THE FINAL *******
+
+struct Scanner {
+private:
+    Node<Customer>* current;
+public:
+    Scanner(void) { current = nullptr; }
+    Scanner(Node<Customer>* start) { current = start;}
+    Customer& operator* (void) { return current->value;} // pass by reference so that we give the actual data in the node, not a copy
+    operator bool(void) const { return current != nullptr; } // allows us to treat it like a boolean
+    Customer& operator++(void) {
+        current = successor(current);
+        return *this
+    }
+}
+
+Notes:
+    ++p is more efficent than p++
+        p++ is a copy, then an increment
+        ++p is an increment, and then toss the copy so we have one less instruction
+    DEFAULT TO ++P
