@@ -1,0 +1,24 @@
+Notes for the final exam
+========================
+
+---- Exam 1 portion ----
+4 programming questions, 5 pts each (could contain hash table stuff, i.e. SCANNING A HASH TABLE)
+    time complexity of soln, etc.
+Output of programs (parameter passing, stack, array parameters, references)
+no integer overflow qs or anything like that, but KNOW 2s COMPLEMENT
+no specific qs on pointers, just throughout the exam
+Big-Oh, stack frame diagrams
+Knuth heap layout, algorithm (4pts)
+---- Exam 2 portion ----
+Wall of text question, hash table is expected
+Identifying good hash functions
+Vector (amortized doubling)
+BST (amortized successor)
+No recursion (unless you really wanna use it)
+C++ constructs/elements (similar to exam 2 but more involved than constructor/destructor)
+    copy constructor related question
+    if you have a pointer in your struct, you probably need a destructor, copy constructor, and assignment
+    operator overloading
+
+
+Check out Exercise 9 for hash table practice
