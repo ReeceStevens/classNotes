@@ -1,0 +1,8 @@
+somefile.java
+
+javac somefile.java
+ (produces somefile.class)
+
+java somefile
+
+Note: public class in java must be the same as the file name.
