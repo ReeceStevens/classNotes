@@ -1,0 +1,12 @@
+CS303E Lecture 10.22.14
+-----------------------
+
+String slicing
+	start = 2;
+	end = 9;
+	subSt = st[start:end];
+		remember-- this is NOT inclusive
+		reasoning-- end-start = len(subSt)
+	it's just like accessing a range of an array
+		if no end index is given, go all the way to the end
+		if just a colon (st[:]), simply makes a copy of the string

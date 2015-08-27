@@ -1,0 +1,34 @@
+EE 422C Notes
+8.27.15
+=============
+
+Homework and exam dates are on canvas
+Course is in a state of flux, might be changing throughout the year.
+
+Read syllabus before next class
+
+Slip Day Policy
+    Assignments are due on Monday, but you have three slip days per semester.
+    This means that three times in the semester, you can turn it in on tuesday
+    without any penalty. This is to account for emergencies and weird computer problems.
+
+Programming assignments are using subversion (ugggghhhhhh)
+
+Register iClicker ASAP. Radio code will be AA
+
+exams are in-class
+
+Aspects of Software Engineering
+-------------------------------
+Create appropriate abstractions to solve complex programming problems
+Practical understanding of data structures
+Understanding of software engineering principles and practices
+
+All programming assignments will be in java.
+6-7 programs
+Potential for pop quizzes at any time
+Curving is possible. 
+
+Compile on Java 8
+
+
