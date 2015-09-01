@@ -1,0 +1,80 @@
+EE 422C Lecture
+9.1.15
+===============
+Today's outline:
+    Start off eclipse
+    Write if/else, for and while loops, methods, object input and return
+    Static methods in Math and Arrays classes
+
+Remember from last time: Static state analysis
+    Given an initial state, series of inputs, and time,
+    ensure that the final state is expected.
+    It's pretty tough to consider every possible state of every input, so
+    a better alternative is a mathematical proof or breakdown. Use proven 
+    or known rules to develop a model of what should happen.
+
+Programming resources:
+    Cave of Programming (youtube)
+        java basics taught using Eclipse
+    Eclipse and Java - Using the Debuggor, Alex Taylor (youtube, 7 videos)
+
+JDK
+    Development tools (javac, java, etc.)
+    JRE (Java Runtime Environment)
+        JVM -- Java Virtual Machine
+        Libraries
+        Other Files
+
+Java Virtual Machine -- unique to each architecture and OS
+    It takes the byte code in each .class file and compiles 
+    it for each particular machine
+    Result: Java is slower than native code (C/C++), but it's 
+    portable to any operating system.
+    
+    JVM's job: Load, verify, and execute code
+
+    The idea is that .class is assembly for this virtual machine. 
+    The virtual machine is the link between Java byte code and actual
+    code for the hardware
+
+Java Runtime Environment
+    Used to provide runtime environment
+
+Java lessons
+------------
+Classes have datafields and methods
+Can't use == on Strings or objects
+Operator overloading is not allowed explicitly. Only the Java language can define what is overloaded.
+Arrays
+    Declaration 
+        <type>[] <name> = new <type>[<length>];
+        ex: int[] numbers = new int[10];   
+    Once declared, each element gets a zero-equivalent value (i.e. null pointers)
+    Accessing and modifying values works as expected
+    You can't resize an array, nor can you compare arrays with == or equals
+    An array doesn't know how to print itself (you can't pass it directly to System.out.println)
+    The Arrays class in package java.util has some useful static methods.
+        (for homework, can't use binarySearch() or sort() )
+    
+Object (the granddaddy in java) only compares memory locations when the == operator is called. 
+That way, if something isn't the exact same object, it won't be considered equal
+
+Static methods of a class don't require an instantiation of the object to make sense,
+but instance methods require that you create an instance of the object before they are called.
+    Case in point: Arrays.toString(Array a). 
+    
+Value semantics
+    Behavior where values are copied when assigned, passed as parameters, or returned.
+    Pure copying.
+    Primitive types use value semantics.
+Reference semantics
+    Variables actually store the address of an object in memory.
+    When one variable is assigned to another, the object is not copied; both variables refer to the same object.
+    int[] a1 = {1,3,5};
+    int[] a2 = a1;
+    a2 and a1 refer to the same array.
+
+When objects are passed as a parameter, the object is not copied; it uses reference semantics.
+
+Using new
+    As long as there is at least one reference to an object, Java won't throw it away.
