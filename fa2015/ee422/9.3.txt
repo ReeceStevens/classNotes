@@ -1,0 +1,18 @@
+EE 422C Lecture
+9.3.15
+===============
+Agenda
+    - Programs with arrays, pass by reference
+    - Insertion sort
+
+Array Programming (see scratch file)
+
+Insertion Sort
+    How do we sort a deck of cards?
+    Insert each element into a new array, placing it in the correct position at every move.
+    You've seen this before.
+
+Math methods and keyboard input
+   Java uses scanners.
+   Scanner has .next<type>() methods that grab the next <type> input by the user. 
+   See examples in ArrayProgram.java (in scratch programs folder under 9.3)
