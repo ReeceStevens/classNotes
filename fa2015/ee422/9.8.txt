@@ -1,0 +1,21 @@
+EE 422C
+9.8.15
+========
+Classes and Objects
+    Class -- a program entity that represents either:
+        1. A program or module,
+        2. A template for a new type of object.
+        Examples: String, Random, JFileChooser, Scanner, File, etc.
+
+    Object -- an entity that combines state and behavior
+        1. Object Oriented Programming (OOP): Programs that perform
+           their behavior as interactions between objects
+
+    Students example:
+        Each student is an object.
+        Fields are names and numbers associated with the student.
+        Methods are formulas associated with the student (like grade average)
+
+    A class introduces abstraction-- the interface to the object maintains consistent behavior.
+
+
