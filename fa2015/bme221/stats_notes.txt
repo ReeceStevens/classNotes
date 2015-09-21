@@ -1,0 +1,78 @@
+Anova and Post-Hoc Tests
+========================
+	External reference: http://udel.edu/~mcdonald/statbigchart.html
+	Go read it, love it, know it.
+
+Two types of hypotheses:
+	Experimental
+		Clearly identify a question that is testable.
+		Make sure that your tests actually evaluate your own hypothesis
+		Three-step process:
+			General
+				- identify general relationship between major variables of the question
+			Directional
+				- Revise general to identify the direction of a relationship (inverse, directly proportional, etc)
+			Measurable
+				- if _____ then _____ because _______.
+				- Doesn't have to be exactly in this format for a paper, but it should be able to be written in this form.
+
+	Statistical
+		H_o (Null Hypothesis)
+			- This means all groups are statistically equal (or, one group mean is greater than or equal to the other)
+	
+		H_a (Alternative Hypothesis/Hypotheses)
+			- Not all of the means of the groups are equal
+
+		A statistical test either "rejects" or "fails to reject"/"support" the null hypothesis.
+			DOES NOT EVER PROVE.
+
+Case Study: Cell Adhesion Background
+	Does fibronectin (Fn) affect 3T3 adhesion?
+		Fn is an ECM glycoprotein
+		Binds to collagen, fibrin, etc.
+		Cell membrane integrins bind to Fna
+	Cell adhesion is dependent on divalent cations (Ca2+)
+	Experimental hypothesis:
+		Fn is going to affect the binding of 3T3 cells.
+		Increasing Fn will cause better adhesion for the 3T3 cells.
+		If we increase Fn, then the cell adhesion will increase because integrands in 3T3 cells should bind to the Fn.
+	Statistical null hypothesis:
+		For multiple batches of differing Fn concentrations, there will be no significant difference in adhesion between cultures.
+	Alternative hypothesis:
+		At least one is different.
+	
+	Experimental design:
+		Multiple plates with varying concentrations of Fn. Use polystyrene surface; use three treatment levels: none, 1 unit Fn (low) , 10 unit Fn (high)	
+
+ANOVA -- Analysis of Variance
+	One-Way ANOVA
+		1 dependent variable (measured value)
+		1 categorical variable (2 or more groups of "treatments")
+			If you only have two groups, you're just doing a t-test.
+			Three or more groups produces an ANOVA.
+		Answers the question: are all the means of the treatment groups "equal" (statistically)?
+
+	Different ANOVA Types
+		Fixed Effects -- we're using this one
+		Random Effects
+
+	What does ANOVA do? 
+		look at the slides.
+
+	In the end: get the p-value. Typically, use the alpha value of 0.05.
+
+	If the p-value is lower than the alpha, the means are statistically different.
+
+	Problem: you know that something is different, but you don't know which group.
+		Can't do a T-test on each pair because it increases the chance of type I errors (false positives).
+		Each test has an error proportional to your alpha value; for lots of tests, that error compounds.
+
+	Answer:
+		Post-Hoc Test
+			Adjust the p-value threshold: that way, you can make the results significant
+			Tukey's method, Scheffes method, or MATLAB!
+			Bonferroni's correction: divide p by 1000. Extremely conservative
+
+	Indicate statistically different data with bars or letters over bar graphs. Make it easy
+	to see if the data is statistically different or not. If you use a notation system, be sure
+	to document it.
