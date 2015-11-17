@@ -195,7 +195,7 @@ Applications -- we can intentionally stimulate the generation of these opiates
 		
 Messed-up dog experiment
 	In artery:
-		morphine + bradykinin => lots of pain, since morphine only acts locally
+		morphine + bradykinin => lots of pain, since morphine only acts centrally
 		asprin + bradykinin => no pain, asprin blocks the bradykinin receptors
 	In spinal cord:
 		opposite
